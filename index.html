@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanso — Less noise. Better decisions.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cr:#F7F4EE;--off:#FAFAF7;--s2:#F5F4F0;--s3:#EDECE8;--sd:#EDE9DF;--sd2:#E4DFD3;
+  --ch:#1B1B1B;--ch2:#2E2E2E;
+  --st:#7A7670;--st2:#9E9A94;--st3:#C4C0B8;
+  --ms:#4A5E45;--ms3:#E8EDE6;
+  --cu:#8B5E3C;--cu2:#F0E8DF;
+  --bd:rgba(27,27,27,0.08);--bd2:rgba(27,27,27,0.14);
+  --r:8px;--rl:12px;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cr);color:var(--ch);min-height:100vh;-webkit-font-smoothing:antialiased;font-weight:300}
+.screen{display:none}.screen.active{display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:54px;background:rgba(247,244,238,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 32px;justify-content:space-between}
+.nav-logo{font-family:'DM Serif Display',Georgia,serif;font-size:19px;cursor:pointer;display:flex;align-items:center;gap:9px;color:var(--ch);text-decoration:none}
+.nav-tag{font-size:10px;color:var(--st2);letter-spacing:0.04em}
+.nav-r{display:flex;align-items:center;gap:12px}
+.nav-co{font-size:11px;color:var(--st);background:var(--sd);border:1px solid var(--bd);padding:4px 12px;border-radius:20px;display:none}
+.nav-back{font-size:12px;color:var(--st);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:300;display:none;padding:6px 10px}
+.nav-back:hover{color:var(--ch)}
+
+/* LAYOUT */
+.wrap{max-width:640px;margin:0 auto;padding:32px 20px}
+.wrap-w{max-width:960px;margin:0 auto;padding:32px 20px}
+.wrap-xl{max-width:1100px;margin:0 auto;padding:0 32px}
+
+/* TYPE */
+h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(30px,5vw,50px);font-weight:400;line-height:1.08;letter-spacing:-0.03em}
+h2{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(22px,3vw,34px);font-weight:400;line-height:1.15;letter-spacing:-0.02em}
+h3{font-size:13px;font-weight:500;letter-spacing:0.01em;color:var(--ch)}
+p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
+.lbl{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--st2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:400;padding:10px 20px;border-radius:var(--r);cursor:pointer;transition:all .2s;border:1px solid transparent;letter-spacing:0.01em}
+.btn-d{background:var(--ch);color:var(--cr);border-color:var(--ch)}.btn-d:hover{background:var(--ch2);transform:translateY(-1px)}
+.btn-o{background:transparent;color:var(--ch);border-color:var(--bd2)}.btn-o:hover{background:var(--sd)}
+.btn-g{background:transparent;color:var(--st);border:none;padding:8px 10px}.btn-g:hover{color:var(--ch)}
+.btn-sm{font-size:12px;padding:8px 14px}
+
+/* FORM */
+.fld{margin-bottom:18px}
+.fld label{display:block;font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--st2);margin-bottom:7px}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--bd2);border-radius:var(--r);background:var(--off);font-family:inherit;font-size:13px;color:var(--ch);outline:none;transition:border-color .2s,box-shadow .2s;font-weight:300;appearance:none}
+.fld input,.fld select{height:42px;padding:0 13px}
+.fld textarea{padding:11px 13px;resize:vertical;min-height:76px;line-height:1.6}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--ch);box-shadow:0 0 0 3px rgba(27,27,27,0.05)}
+.fld select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%237A7670' stroke-width='1.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* CARD */
+.card{background:var(--off);border:1px solid var(--bd);border-radius:var(--rl);padding:22px}
+.chdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.cico{width:30px;height:30px;border-radius:var(--r);background:var(--sd);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:400}
+.tg-ms{background:var(--ms3);color:var(--ms)}
+.tg-cu{background:var(--cu2);color:var(--cu)}
+.tg-st{background:var(--sd);color:var(--st);border:1px solid var(--bd)}
+
+/* TABS */
+.tab-row{display:flex;gap:2px;margin-bottom:20px;background:var(--sd);padding:3px;border-radius:var(--r)}
+.tab{flex:1;text-align:center;padding:8px 6px;border-radius:6px;font-size:11px;font-weight:400;cursor:pointer;transition:all .2s;color:var(--st)}
+.tab.active{background:var(--off);color:var(--ch);box-shadow:0 1px 3px rgba(0,0,0,0.07)}
+
+/* MOKU SVG ANIMATION */
+.mk-svg{animation:mkf 4s ease-in-out infinite}
+.mk-sh{border-radius:50%;background:rgba(27,27,27,0.08);margin-top:3px;animation:mks 4s ease-in-out infinite}
+@keyframes mkf{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+@keyframes mks{0%,100%{transform:scaleX(1);opacity:.8}50%{transform:scaleX(.65);opacity:.35}}
+.mk-bl{animation:mkb 4.5s ease-in-out infinite}
+@keyframes mkb{0%,82%,100%{transform:scaleY(1)}84%,86%{transform:scaleY(0.05)}}
+
+/* DOTS */
+.dots{display:flex;gap:5px;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ch);opacity:.15;animation:dp 1.6s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes dp{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.7;transform:scale(1.15)}}
+
+/* PROGRESS */
+.prg{height:2px;background:var(--sd2);border-radius:1px;margin-bottom:28px;overflow:hidden}
+.prg-f{height:100%;background:var(--ch);border-radius:1px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ANIMATIONS */
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fa{animation:fu .35s ease both}
+
+/* SETUP DOTS */
+.sdots{display:flex;gap:5px;margin-bottom:20px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--sd2);transition:background .3s}
+.sdot.done{background:var(--ms)}.sdot.act{background:var(--ch)}
+
+/* OUTPUT */
+.ph{margin-bottom:18px}
+.ph-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ph-n{width:20px;height:20px;border-radius:4px;background:var(--sd);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;color:var(--st);flex-shrink:0}
+.ph-nm{font-size:13px;font-weight:500}
+.ph-bd{font-size:10px;padding:1px 7px;border-radius:20px;background:var(--sd);color:var(--st2)}
+.ph-body{padding-left:28px}
+.ph-act{font-size:12px;color:var(--st);padding:5px 0;border-bottom:1px solid var(--bd);display:flex;gap:6px;line-height:1.5;font-weight:300}
+.ph-act:last-child{border-bottom:none}
+.nxt{display:flex;align-items:center;gap:10px;font-size:12px;padding:9px 12px;background:var(--sd);border-radius:var(--r);margin-bottom:5px}
+.nxt-n{width:18px;height:18px;border-radius:4px;background:var(--ch);color:var(--cr);font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chk{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd)}
+.chk-box{width:14px;height:14px;border-radius:3px;border:1px solid var(--st3);flex-shrink:0;margin-top:1px}
+.chk-txt{font-size:12px;color:var(--st);line-height:1.5;font-weight:300}
+.err{padding:12px;background:var(--sd);border-radius:var(--r);margin-bottom:8px}
+.err-b{font-size:12px;font-weight:500;color:var(--cu);margin-bottom:5px;display:flex;gap:7px}
+.err-g{font-size:12px;color:var(--st);display:flex;gap:7px;font-weight:300;line-height:1.5}
+.obj{padding:12px;background:var(--sd);border-radius:var(--r);margin-bottom:8px}
+.obj-q{font-size:12px;font-weight:500;color:var(--cu);margin-bottom:5px}
+.obj-a{font-size:12px;color:var(--st);line-height:1.5;font-weight:300}
+.rec{background:var(--ch);border-radius:var(--r);padding:14px 18px;margin-top:12px}
+.rec p{font-size:13px;color:rgba(247,244,238,0.85);line-height:1.7;font-weight:300}
+.alrt{background:var(--cu2);border:1px solid rgba(139,94,60,0.15);border-radius:var(--r);padding:12px 15px;margin-bottom:10px;display:flex;gap:8px}
+.alrt p{font-size:12px;color:var(--cu);line-height:1.6;font-weight:300}
+.bnch{background:var(--sd);border-radius:var(--r);padding:12px 15px;display:flex;gap:8px}
+.bnch p{font-size:12px;color:var(--st);line-height:1.6;font-weight:300}
+
+/* MOD CARDS */
+.mc{background:var(--off);border:1px solid var(--bd);border-radius:var(--rl);padding:16px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:10px}
+.mc:hover{border-color:var(--bd2);transform:translateY(-2px);box-shadow:0 4px 14px rgba(27,27,27,0.07)}
+.hi{background:var(--off);border:1px solid var(--bd);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:7px;transition:background .15s}
+.hi:hover{background:var(--sd)}
+
+/* MOKU CHAT */
+#mk-btn{position:fixed;bottom:24px;right:24px;z-index:200;width:48px;height:48px;border-radius:50%;background:var(--ch);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:transform .2s}
+#mk-btn:hover{transform:scale(1.07)}
+#mk-panel{position:fixed;bottom:82px;right:24px;z-index:200;width:320px;max-height:500px;background:var(--off);border:1px solid var(--bd);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.12);display:none;flex-direction:column;overflow:hidden}
+#mk-panel.open{display:flex}
+.mk-hdr{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;background:var(--cr);flex-shrink:0}
+.mk-hdr-info h3{font-size:13px;font-weight:500;color:var(--ch)}
+.mk-hdr-info p{font-size:11px;color:var(--st2);font-weight:300}
+.mk-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--st2);font-size:18px;line-height:1;padding:2px}
+.mk-close:hover{color:var(--ch)}
+.mk-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;min-height:160px;max-height:300px}
+.mk-msgs::-webkit-scrollbar{width:3px}
+.mk-msgs::-webkit-scrollbar-thumb{background:var(--sd2);border-radius:2px}
+.msg{display:flex;gap:7px;align-items:flex-end}
+.msg.usr{flex-direction:row-reverse}
+.mb{max-width:220px;padding:9px 12px;border-radius:10px;font-size:12px;line-height:1.6;font-weight:300}
+.msg.mk .mb{background:var(--sd);color:var(--ch);border-bottom-left-radius:3px}
+.msg.usr .mb{background:var(--ch);color:rgba(247,244,238,0.9);border-bottom-right-radius:3px}
+.msg-av{width:24px;height:24px;border-radius:50%;background:var(--sd2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ty-dot{width:5px;height:5px;border-radius:50%;background:var(--st3);animation:td 1.2s infinite;display:inline-block;margin-right:2px}
+.ty-dot:nth-child(2){animation-delay:.2s}.ty-dot:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+.mk-sugs{padding:7px 12px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--bd);background:var(--cr);flex-shrink:0}
+.sg{font-size:11px;padding:4px 9px;border-radius:20px;background:var(--sd);border:1px solid var(--bd);cursor:pointer;color:var(--st);font-family:inherit;font-weight:300;transition:all .15s}
+.sg:hover{background:var(--sd2);color:var(--ch)}
+.mk-inp-row{padding:9px 11px;border-top:1px solid var(--bd);display:flex;gap:7px;align-items:flex-end;background:var(--cr);flex-shrink:0}
+.mk-inp{flex:1;border:1px solid var(--bd2);border-radius:var(--r);background:var(--off);font-family:inherit;font-size:12px;color:var(--ch);outline:none;padding:7px 11px;resize:none;min-height:34px;max-height:90px;line-height:1.5;font-weight:300;transition:border-color .2s}
+.mk-inp:focus{border-color:var(--ch)}
+.mk-send{width:32px;height:32px;border-radius:var(--r);background:var(--ch);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s}
+.mk-send:hover{opacity:.8}
+
+/* LANDING */
+.hero{min-height:calc(100vh - 54px);display:flex;align-items:center;padding:54px 32px 40px;gap:40px;flex-wrap:wrap}
+.hero-l{max-width:460px;flex:1;min-width:280px}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--st2);background:var(--sd);border:1px solid var(--bd);border-radius:20px;padding:4px 12px;margin-bottom:28px}
+.hero-dot{width:4px;height:4px;border-radius:50%;background:var(--ms)}
+.hero-r{flex:1;display:flex;align-items:center;justify-content:center;min-width:240px}
+.hz-scene{position:relative;width:260px;height:260px;display:flex;align-items:center;justify-content:center}
+.hz-c{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(ellipse,var(--sd2) 0%,transparent 70%);opacity:.6}
+.hz-r1{position:absolute;width:200px;height:36px;border-radius:50%;border:1px solid var(--st3);opacity:.3;bottom:50px}
+.hz-r2{position:absolute;width:236px;height:44px;border-radius:50%;border:1px solid var(--st3);opacity:.2;bottom:42px}
+.spb{position:absolute;top:-22px;right:-85px;background:var(--off);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;font-size:11px;color:var(--st);white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.06);animation:bub 1s .6s ease both;font-weight:300}
+.spb::after{content:'';position:absolute;bottom:-5px;left:16px;width:9px;height:9px;background:var(--off);border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);transform:rotate(45deg)}
+@keyframes bub{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.sec{padding:72px 32px}
+.divl{height:1px;background:var(--bd);margin:0 32px}
+.steps-g{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;margin-top:28px}
+.step-i{background:var(--off);padding:24px 20px}
+.sn{font-size:10px;font-weight:500;color:var(--st2);letter-spacing:0.05em;margin-bottom:10px}
+.st{font-size:13px;font-weight:500;margin-bottom:6px}
+.sd{font-size:11px;color:var(--st);line-height:1.6;font-weight:300}
+.mods-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;margin-top:28px}
+.mp{background:var(--off);padding:18px 16px;cursor:pointer;transition:background .12s}
+.mp:hover{background:var(--sd)}
+.final-sec{padding:90px 32px;text-align:center}
+
+@media(max-width:700px){
+  nav{padding:0 16px}
+  .hero{flex-direction:column;padding:70px 16px 36px;min-height:auto}
+  .steps-g{grid-template-columns:1fr 1fr}
+  .g2{grid-template-columns:1fr}
+  .tab{font-size:10px;padding:7px 3px}
+  .sec,.divl,.final-sec{padding-left:16px;padding-right:16px;margin-left:0;margin-right:0}
+  .wrap-xl{padding:0 16px}
+  #mk-panel{width:calc(100vw - 32px);right:16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="goTo('landing')">
+    Kanso <span class="nav-tag">less noise. better decisions.</span>
+  </div>
+  <div class="nav-r">
+    <span class="nav-co" id="nav-co"></span>
+    <button class="nav-back" id="nav-back" onclick="goTo('dashboard')">← Painel</button>
+    <button class="btn btn-d btn-sm" id="nav-cta" onclick="goTo('setup')">Iniciar diagnóstico</button>
+  </div>
+</nav>
+
+<!-- MOKU CHAT BTN -->
+<button id="mk-btn" onclick="toggleChat()" aria-label="Abrir chat com o Moku">
+  <svg width="24" height="27" viewBox="0 0 90 100" fill="none">
+    <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1.5"/>
+    <ellipse cx="32" cy="44" rx="7" ry="7" fill="#FAFAF7"/>
+    <ellipse cx="58" cy="44" rx="7" ry="7" fill="#FAFAF7"/>
+    <ellipse cx="32" cy="44" rx="3" ry="3" fill="#2E2E2E"/>
+    <ellipse cx="58" cy="44" rx="3" ry="3" fill="#2E2E2E"/>
+  </svg>
+</button>
+
+<!-- MOKU CHAT PANEL -->
+<div id="mk-panel" role="dialog" aria-label="Chat com o Moku">
+  <div class="mk-hdr">
+    <svg width="28" height="32" viewBox="0 0 90 100" fill="none" style="flex-shrink:0">
+      <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+      <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
+      <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
+      <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+      <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+    </svg>
+    <div class="mk-hdr-info">
+      <h3>Moku</h3>
+      <p>Consultor Kanso</p>
+    </div>
+    <button class="mk-close" onclick="toggleChat()" aria-label="Fechar chat">×</button>
+  </div>
+  <div class="mk-msgs" id="mk-msgs"></div>
+  <div class="mk-sugs" id="mk-sugs"></div>
+  <div class="mk-inp-row">
+    <textarea class="mk-inp" id="mk-inp" placeholder="Pergunte ao Moku..." rows="1"
+      onkeydown="mkKey(event)" oninput="mkResize(this)" aria-label="Mensagem para o Moku"></textarea>
+    <button class="mk-send" onclick="sendChat()" aria-label="Enviar">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(247,244,238,0.9)">
+        <path d="M2 12L22 2L14 22L11 13L2 12Z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ LANDING ═══════════════════════════════════════════════════════════ -->
+<div id="s-landing" class="screen active">
+  <section class="hero">
+    <div class="hero-l fa">
+      <div class="hero-badge"><span class="hero-dot"></span>Sistema operacional de RH</div>
+      <h1 style="margin-bottom:16px">Less noise.<br>Better decisions.</h1>
+      <p style="font-size:15px;max-width:380px;margin-bottom:28px">Kanso transforma a complexidade do RH em sistemas claros, acionáveis e consistentes.</p>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button class="btn btn-d" style="font-size:14px;padding:12px 22px" onclick="goTo('setup')">Iniciar diagnóstico</button>
+        <button class="btn btn-g" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">Ver como funciona →</button>
+      </div>
+    </div>
+    <div class="hero-r fa">
+      <div class="hz-scene">
+        <div class="hz-c"></div><div class="hz-r1"></div><div class="hz-r2"></div>
+        <div style="position:relative;z-index:2">
+          <div class="spb">Vamos estruturar seu RH juntos?</div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <svg class="mk-svg" width="90" height="100" viewBox="0 0 90 100" fill="none">
+              <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+              <rect x="5" y="8" width="80" height="38" rx="24" fill="#EDEBE5" opacity=".4"/>
+              <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+              <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+              <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+              <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+              <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+              <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+            </svg>
+            <div class="mk-sh" style="width:36px;height:5px;margin-top:3px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divl"></div>
+
+  <section class="sec" id="how">
+    <div class="wrap-xl">
+      <div class="lbl" style="margin-bottom:16px">Como o Kanso funciona</div>
+      <h2>Do contexto ao plano<br>acionável em 4 passos.</h2>
+      <div class="steps-g">
+        <div class="step-i"><div class="sn">01</div><div class="st">Contexto</div><div class="sd">Empresa, momento financeiro, quem executa e o que já foi tentado.</div></div>
+        <div class="step-i"><div class="sn">02</div><div class="st">Diagnóstico</div><div class="sd">Uma pergunta por vez, sem distração. Como uma sessão estratégica privada.</div></div>
+        <div class="step-i"><div class="sn">03</div><div class="st">Estrutura</div><div class="sd">Benchmarks reais e legislação para recomendações precisas ao seu contexto.</div></div>
+        <div class="step-i"><div class="sn">04</div><div class="st">Plano + Moku</div><div class="sd">Plano completo e o Moku disponível para tirar dúvidas e aprofundar qualquer ponto.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divl"></div>
+
+  <section class="sec">
+    <div class="wrap-xl">
+      <div class="lbl" style="margin-bottom:16px">Soluções Kanso</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <h2>16 áreas de RH para<br>estruturar e evoluir.</h2>
+        <p style="max-width:280px">Cada módulo com diagnóstico personalizado e entregáveis prontos para usar.</p>
+      </div>
+      <div class="mods-g" id="mods-land"></div>
+    </div>
+  </section>
+
+  <div class="divl"></div>
+
+  <section class="final-sec">
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px">
+        <svg class="mk-svg" width="60" height="67" viewBox="0 0 90 100" fill="none">
+          <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+          <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+          <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+          <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+          <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+          <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+          <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+        </svg>
+        <div class="mk-sh" style="width:30px;height:4px;margin-top:2px"></div>
+      </div>
+      <h2 style="margin-bottom:10px">Menos ruído.<br>Mais clareza estratégica.</h2>
+      <p style="margin-bottom:28px">Estruture seu RH com inteligência e execute com confiança.</p>
+      <button class="btn btn-d" style="font-size:14px;padding:12px 24px" onclick="goTo('setup')">Iniciar diagnóstico gratuito</button>
+      <div style="display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;justify-content:center">
+        <span style="font-size:11px;color:var(--st2)">Sem cartão de crédito</span>
+        <span style="font-size:11px;color:var(--st2)">Setup em 2 minutos</span>
+        <span style="font-size:11px;color:var(--st2)">Resultado imediato</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ SETUP ══════════════════════════════════════════════════════════════ -->
+<div id="s-setup" class="screen">
+  <div class="wrap" style="padding-top:88px">
+    <button class="btn btn-g" style="padding:0 0 18px;color:var(--st2);margin-left:-4px" onclick="goTo('landing')">← Voltar</button>
+    <div class="sdots" id="sdots"></div>
+    <h2 id="sh" style="margin-bottom:5px">Sobre sua empresa</h2>
+    <p id="sp" style="margin-bottom:22px">Essas informações personalizam cada diagnóstico gerado pelo Moku.</p>
+    <div class="card fa">
+      <div id="ss1">
+        <div class="fld"><label>Nome da empresa</label><input id="cx-name" placeholder="Ex: Acme Tecnologia" autocomplete="organization"/></div>
+        <div class="g2">
+          <div class="fld"><label>Logo da empresa — opcional</label><input id="cx-logo" type="file" accept="image/png,image/jpeg" style="padding:9px 13px;height:auto;font-size:12px"/></div>
+          <div class="fld"><label>Cor principal da marca</label><input id="cx-cor" type="color" value="#1B1B1B" style="padding:4px;height:42px;cursor:pointer"/></div>
+        </div>
+        <div class="g2">
+          <div class="fld"><label>Setor</label>
+            <select id="cx-setor"><option value="">Selecione</option>
+              <option>Tecnologia / SaaS</option><option>Varejo / E-commerce</option><option>Financeiro / Fintech</option>
+              <option>Saúde</option><option>Indústria / Manufatura</option><option>Energia / Petróleo e Gás</option>
+              <option>Educação</option><option>Serviços / Consultoria</option><option>Logística</option><option>Outro</option>
+            </select>
+          </div>
+          <div class="fld"><label>Tamanho</label>
+            <select id="cx-size"><option value="">Selecione</option>
+              <option>Até 50 pessoas</option><option>50 a 200 pessoas</option><option>200 a 1.000 pessoas</option><option>Mais de 1.000 pessoas</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn btn-d" onclick="sNext(1)">Continuar</button></div>
+      </div>
+      <div id="ss2" style="display:none">
+        <div class="g2">
+          <div class="fld"><label>Modelo de trabalho</label>
+            <select id="cx-modelo"><option value="">Selecione</option><option>100% presencial</option><option>Híbrido</option><option>100% remoto</option></select>
+          </div>
+          <div class="fld"><label>Estágio</label>
+            <select id="cx-estagio"><option value="">Selecione</option>
+              <option>Startup — menos de 3 anos</option><option>Scale-up — crescimento acelerado</option>
+              <option>Empresa estabelecida</option><option>Corporação / Multinacional</option><option>Pós-fusão ou aquisição</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld"><label>Momento financeiro</label>
+          <select id="cx-fin"><option value="">Selecione</option>
+            <option>Crescimento acelerado — investindo em pessoas</option>
+            <option>Estável — orçamento controlado</option>
+            <option>Contenção — corte de custos em andamento</option>
+            <option>Captação / rodada de investimento</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between"><button class="btn btn-g" onclick="sBack(2)">← Voltar</button><button class="btn btn-d" onclick="sNext(2)">Continuar</button></div>
+      </div>
+      <div id="ss3" style="display:none">
+        <div class="g2">
+          <div class="fld"><label>Maturidade de RH</label>
+            <select id="cx-matur"><option value="">Selecione</option>
+              <option>Estruturando do zero</option><option>Processos básicos, precisam de melhoria</option>
+              <option>RH estruturado — evoluindo para estratégico</option><option>RH maduro — buscando inovação</option>
+            </select>
+          </div>
+          <div class="fld"><label>Tamanho do time de RH</label>
+            <select id="cx-rhsize"><option value="">Selecione</option>
+              <option>Só eu — sou o RH da empresa</option><option>2 a 5 pessoas</option><option>6 a 15 pessoas</option><option>Mais de 15 pessoas</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld"><label>Seu cargo</label>
+          <select id="cx-cargo"><option value="">Selecione</option>
+            <option>CHRO / VP de Pessoas</option><option>Gerente / Coordenador de RH</option>
+            <option>HRBP</option><option>Analista de RH</option><option>CEO / Fundador</option><option>Consultor</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between"><button class="btn btn-g" onclick="sBack(3)">← Voltar</button><button class="btn btn-d" onclick="sNext(3)">Continuar</button></div>
+      </div>
+      <div id="ss4" style="display:none">
+        <div class="fld"><label>Urgência do projeto</label>
+          <select id="cx-urg"><option value="">Selecione</option>
+            <option>Urgente — preciso de resultado em semanas</option><option>Moderada — temos alguns meses</option>
+            <option>Planejamento — sem prazo definido</option><option>Deadline externo — auditoria, board ou fusão</option>
+          </select>
+        </div>
+        <div class="fld"><label>Orçamento disponível</label>
+          <select id="cx-orc"><option value="">Selecione</option>
+            <option>Sem orçamento — preciso convencer a liderança</option><option>Limitado — soluções de baixo custo</option>
+            <option>Médio — posso contratar apoio pontual</option><option>Aprovado — posso investir em ferramentas</option>
+          </select>
+        </div>
+        <div class="fld"><label>O que já foi tentado antes — e não funcionou</label>
+          <textarea id="cx-hist" placeholder="Ex: tentamos AVD no ano passado mas os líderes não engajaram e o processo parou..."></textarea>
+        </div>
+        <div style="display:flex;justify-content:space-between"><button class="btn btn-g" onclick="sBack(4)">← Voltar</button><button class="btn btn-d" onclick="finishSetup()">Acessar o Kanso →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ══════════════════════════════════════════════════════════ -->
+<div id="s-dashboard" class="screen">
+  <div class="wrap-w" style="padding-top:88px">
+    <div style="margin-bottom:26px" class="fa">
+      <h2 id="dgreet" style="margin-bottom:4px"></h2>
+      <p>Selecione uma área para iniciar o diagnóstico.</p>
+    </div>
+    <div id="dco" style="background:var(--ch);border-radius:var(--rl);padding:18px 22px;margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px"></div>
+    <div class="lbl" style="margin-bottom:12px">Módulos disponíveis</div>
+    <div id="dgrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(162px,1fr));gap:9px;margin-bottom:32px"></div>
+    <div class="lbl" id="htit" style="display:none;margin-bottom:12px">Diagnósticos anteriores</div>
+    <div id="hlist"></div>
+    <div id="hemp" style="text-align:center;padding:44px;background:var(--off);border:1px dashed var(--bd2);border-radius:var(--rl)">
+      <div style="display:flex;flex-direction:column;align-items:center;margin:0 auto 14px;width:fit-content">
+        <svg class="mk-svg" width="44" height="49" viewBox="0 0 90 100" fill="none">
+          <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+          <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+          <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+          <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+          <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+          <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+          <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+        </svg>
+        <div class="mk-sh" style="width:28px;height:4px;margin-top:2px"></div>
+      </div>
+      <p style="font-size:12px">Nenhum diagnóstico gerado ainda.<br>Selecione um módulo acima para começar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DIAGNÓSTICO ════════════════════════════════════════════════════════ -->
+<div id="s-diag" class="screen">
+  <div class="wrap" style="padding-top:88px">
+    <button class="btn btn-g" style="padding:0 0 18px;color:var(--st2);margin-left:-4px" onclick="goTo('dashboard')">← Painel</button>
+    <div class="prg"><div class="prg-f" id="dprog" style="width:0%"></div></div>
+    <div id="dmod" style="display:flex;align-items:center;gap:8px;margin-bottom:14px"></div>
+    <h2 id="qtxt" style="font-size:clamp(16px,2.5vw,22px);margin-bottom:24px;line-height:1.3" class="fa"></h2>
+    <div id="opts" style="display:flex;flex-direction:column;gap:7px;margin-bottom:28px"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-g" id="bprev" onclick="prevQ()" style="display:none">← Anterior</button>
+      <button class="btn btn-d" id="bnext" onclick="nextQ()" style="display:none">Próxima</button>
+      <button class="btn btn-d" id="bgen" onclick="genPlan()" style="display:none">Gerar diagnóstico completo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LOADING ════════════════════════════════════════════════════════════ -->
+<div id="s-loading" class="screen">
+  <div style="max-width:380px;margin:0 auto;padding:90px 20px;text-align:center">
+    <div style="display:flex;flex-direction:column;align-items:center;margin:0 auto 28px;width:fit-content">
+      <svg class="mk-svg" width="66" height="73" viewBox="0 0 90 100" fill="none">
+        <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+        <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+        <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
+        <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+        <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+        <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+        <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+      </svg>
+      <div class="mk-sh" style="width:32px;height:4px;margin-top:2px"></div>
+    </div>
+    <h2 style="font-size:20px;margin-bottom:7px">Analisando sua empresa</h2>
+    <p style="margin-bottom:32px;font-size:12px">O Moku está estruturando seu diagnóstico.</p>
+    <div class="dots" style="margin-bottom:32px"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div id="lstps" style="text-align:left"></div>
+  </div>
+</div>
+
+<!-- ═══ OUTPUT ═════════════════════════════════════════════════════════════ -->
+<div id="s-output" class="screen">
+  <div class="wrap" style="max-width:720px;padding-top:80px">
+    <button class="btn btn-g" style="padding:0 0 20px;color:var(--st2);margin-left:-4px" onclick="goTo('dashboard')">← Painel</button>
+    <div id="ohero" style="margin-bottom:20px" class="fa"></div>
+    <div id="mk-cta" style="background:var(--sd);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
+      <svg width="32" height="36" viewBox="0 0 90 100" fill="none" style="flex-shrink:0">
+        <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
+        <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
+        <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
+        <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+        <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
+        <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+        <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
+      </svg>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;margin-bottom:2px">Tem dúvidas sobre este plano?</div>
+        <div style="font-size:11px;color:var(--st);font-weight:300">O Moku já conhece o contexto da sua empresa e pode aprofundar qualquer ponto.</div>
+      </div>
+      <button class="btn btn-d btn-sm" onclick="openChat()">Perguntar ao Moku</button>
+    </div>
+    <div class="tab-row">
+      <div class="tab active" onclick="showTab('plano')">Plano</div>
+      <div class="tab" onclick="showTab('gestor')">Para o gestor</div>
+      <div class="tab" onclick="showTab('checklist')">Checklist</div>
+      <div class="tab" onclick="showTab('erros')">Erros comuns</div>
+    </div>
+    <div id="tab-plano"></div>
+    <div id="tab-gestor" style="display:none"></div>
+    <div id="tab-checklist" style="display:none"></div>
+    <div id="tab-erros" style="display:none"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--bd);margin-top:16px">
+      <button class="btn btn-d" onclick="genPPTX()">Baixar apresentação (.pptx)</button>
+      <button class="btn btn-d" onclick="genDOC()">Baixar documento (Word)</button>
+      <button class="btn btn-o" onclick="window.print()">Exportar PDF</button>
+      <button class="btn btn-o" onclick="goTo('dashboard')">← Outro módulo</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
+<script>
+const API='/api/chat';
+
+const MODS=[
+  {id:"rh-estrategico",icon:"🎯",title:"RH Estratégico",sub:"Planejamento, OKRs, tese de talento"},
+  {id:"rs",icon:"🔍",title:"Recrutamento e Seleção",sub:"Processo, modelos, Bar Raiser"},
+  {id:"performance",icon:"📊",title:"Gestão de Performance",sub:"AVD, calibração, 9box, devolutiva"},
+  {id:"talentos",icon:"⭐",title:"Talentos e Sucessão",sub:"Key seats, RPKS, sucessores"},
+  {id:"carreira",icon:"🛤",title:"Trilhas de Carreira",sub:"Levels, competências, promoção"},
+  {id:"lideranca",icon:"👑",title:"Dev. de Liderança",sub:"Onboarding, 1:1, LNPS, trilhas"},
+  {id:"tnd",icon:"📚",title:"T&D / Aprendizagem",sub:"LNT, PDI, Kirkpatrick"},
+  {id:"cultura",icon:"🏛",title:"Cultura Organizacional",sub:"Remodelagem, rituais, métricas"},
+  {id:"remuneracao",icon:"💰",title:"Remuneração e Benefícios",sub:"Faixas, PJ×CLT, ESOP"},
+  {id:"people-analytics",icon:"📈",title:"People Analytics e IA",sub:"Métricas, ferramentas, IA"},
+  {id:"dei",icon:"🤝",title:"Diversidade e Inclusão",sub:"DEI, equidade, legislação"},
+  {id:"saude-mental",icon:"🧠",title:"Saúde Mental e NR-01",sub:"Riscos psicossociais, NR-01"},
+  {id:"dp",icon:"📋",title:"Departamento Pessoal",sub:"CLT, folha, eSocial"},
+  {id:"incentivos",icon:"🏆",title:"Plano de Incentivos",sub:"Bônus, ILP, variável, ESOP"},
+  {id:"engajamento",icon:"💬",title:"Engajamento e Clima",sub:"eNPS, pesquisas, ações"},
+  {id:"onboarding",icon:"🚪",title:"Onboarding",sub:"Jornada de chegada, 90 dias"},
+];
+
+const QS={
+  "rh-estrategico":[
+    {q:"Qual é o principal desafio estratégico do negócio neste momento?",opts:["Crescimento acelerado — escalar pessoas junto","Eficiência e redução de custos","Integração pós-fusão ou aquisição","Transformação digital e adoção de IA","Retenção de talentos críticos"]},
+    {q:"O RH está inserido nas conversas estratégicas da empresa?",opts:["Sim — participamos regularmente","Às vezes — quando convidados","Raramente — informados depois das decisões"]},
+    {q:"Existe planejamento formal de RH conectado à estratégia?",opts:["Sim, com OKRs e métricas conectados","Temos planejamento, mas desconectado","Não existe — operamos por demanda"]},
+    {q:"Qual é a maior lacuna do RH neste momento?",opts:["Não sabemos para onde o negócio vai","Sabemos a estratégia mas não traduzimos em ações","Temos planos mas não executamos","Executamos mas não medimos impacto"]},
+  ],
+  "rs":[
+    {q:"Qual é o cenário de contratações nos próximos 6 meses?",opts:["Expansão acelerada — mais de 30","Crescimento moderado — 10 a 30","Volume baixo — menos de 10, posições críticas","Estável — reposições pontuais"]},
+    {q:"Onde está o maior gargalo no processo hoje?",opts:["Não encontramos candidatos qualificados","Candidatos chegam mas não passam","Processo longo — perdemos para concorrentes","Contratamos pessoas que não performam","Não temos processo estruturado"]},
+    {q:"Como as entrevistas são conduzidas hoje?",opts:["Só o gestor — RH sem envolvimento","RH faz triagem, gestor decide","RH e gestor juntos com critérios alinhados","Múltiplos entrevistadores com scorecard"]},
+    {q:"Qual modelo de R&S faz mais sentido agora?",opts:["Time interno de RH","RPO para escala e agilidade","Headhunter para posições sênior","Mix de modelos"]},
+  ],
+  "performance":[
+    {q:"Como está o processo de gestão de performance hoje?",opts:["Ciclo estruturado rodando bem","Existe mas inconsistente — depende do gestor","Já tentamos, não engajou e parou","Não temos — queremos estruturar"]},
+    {q:"O que o processo de performance precisa gerar?",opts:["Critérios para promoções e aumentos","Base para desenvolvimento e PDI","Dados para decisões de desligamento","Sistema integrado — tudo junto"]},
+    {q:"Qual é o maior obstáculo hoje?",opts:["Líderes evitam feedback difícil","Critérios subjetivos — cada gestor usa sua régua","Processo burocrático demais","Falta calibração entre áreas"]},
+    {q:"Qual modelo de avaliação considera mais adequado?",opts:["9box — performance × potencial","Escala de conceitos com critérios claros","Misto de competências e resultados","Não tenho clareza — quero recomendação"]},
+  ],
+  "talentos":[
+    {q:"O que trouxe a urgência de mapear talentos agora?",opts:["Risco de perder pessoas-chave insubstituíveis","Planejar sucessão antes que vire crise","Pós-fusão — mapear quem fica onde","Amadurecimento natural do RH"]},
+    {q:"A empresa tem clareza sobre quais posições são críticas?",opts:["Sim — mapeadas e documentadas","Percepção informal, não formalizado","Não — nunca fizemos esse exercício"]},
+    {q:"Como está o engajamento da liderança com o tema?",opts:["CEO e C-Level querem estruturar","Liderança média quer, C-Level não priorizou","Precisamos construir o business case"]},
+    {q:"Qual o principal gap no desenvolvimento de sucessores?",opts:["Não sabemos quem seriam os sucessores","Temos candidatos mas sem PDI","Falta integração entre performance, potencial e sucessão","O processo não existe — vamos criar"]},
+  ],
+  "carreira":[
+    {q:"Como está a estrutura de carreira hoje?",opts:["Levels e trilhas documentadas e comunicadas","Algo informal — pessoas não sabem como crescem","Não existe — promoções sem critério"]},
+    {q:"Qual é o problema central que a trilha precisa resolver?",opts:["Promoções por tempo de casa ou afinidade","Pessoas não sabem o que precisam desenvolver","Perdemos talentos sênior sem perspectiva","Recrutamos no nível errado"]},
+    {q:"Como está o alinhamento da liderança para implementar levels?",opts:["CEO e liderança comprometidos","Liderança neutra — precisamos mostrar valor","Resistência — precisamos de benchmarks e business case"]},
+    {q:"Qual seria o ponto de partida mais estratégico?",opts:["Área de tecnologia — já tem cultura de levels","Implementar para toda a empresa","Começar pela liderança","Piloto em uma área e aprender"]},
+  ],
+  "lideranca":[
+    {q:"Qual é o sintoma mais visível do problema de liderança?",opts:["Performance inconsistente — depende do gestor","Alta rotatividade por causa do líder","Líderes técnicos que não desenvolvem pessoas","Falta de consistência entre líderes"]},
+    {q:"Existe estrutura de desenvolvimento de liderança hoje?",opts:["Programa estruturado com trilha e métricas","Ações pontuais sem continuidade","Cursos externos sem estrutura interna","Não existe"]},
+    {q:"Como os líderes recebem feedback sobre sua liderança?",opts:["LNPS ou pesquisa periódica","Feedback informal sem estrutura","Apenas no ciclo anual de performance","Não existe mecanismo"]},
+    {q:"Qual formato de desenvolvimento tem mais aderência?",opts:["Conteúdo online curto — 10 a 15 min","Encontros ao vivo em grupos","Peer learning — líderes com líderes","Combinação de formatos"]},
+  ],
+  "tnd":[
+    {q:"Como as necessidades de treinamento são identificadas?",opts:["Conectamos LNT à estratégia e gaps","Formulário anual enviado às áreas","Treinamos por demanda","Não temos processo — ações reativas"]},
+    {q:"Qual é o maior desafio em T&D hoje?",opts:["Orçamento insuficiente","Pessoas fazem mas não aplicam","Não conseguimos medir impacto","Conteúdo não é relevante"]},
+    {q:"Existe LMS ou plataforma de treinamento?",opts:["Sim — usamos bem","Temos mas fica esquecida","Não temos"]},
+    {q:"Como os colaboradores preferem aprender?",opts:["Online curto no próprio ritmo","Treinamentos ao vivo","Mix equilibrado","Aprendizado no trabalho"]},
+  ],
+  "cultura":[
+    {q:"Como está a definição de cultura hoje?",opts:["Documentada com valores e comportamentos","Temos valores sem comportamentos concretos","Existe mas nunca formalizada","Passando por mudança cultural"]},
+    {q:"Qual é o principal desafio cultural?",opts:["Liderança não pratica os valores","Cultura não foi desdobrada para os times","Crescemos rápido e a cultura diluiu","Pós-fusão — duas culturas para convergir"]},
+    {q:"Como a cultura é avaliada hoje?",opts:["Pesquisa cultural periódica","Apenas via eNPS e clima","Avaliamos na AVD como competências","Não medimos"]},
+    {q:"Como está o papel da liderança na agenda de cultura?",opts:["Alta liderança é protagonista","Liderança média engajada, C-Level distante","Cultura ainda é vista como responsabilidade do RH","Precisamos construir o engajamento"]},
+  ],
+  "remuneracao":[
+    {q:"Como está a estrutura de remuneração hoje?",opts:["Pesquisa atualizada com faixas por level","Temos cargos mas pesquisa desatualizada","Não existe estrutura — caso a caso","Crescemos e a bagunça começou a gerar problema"]},
+    {q:"Qual é o principal problema de remuneração?",opts:["Salários defasados — perdemos pessoas","Falta critério para aumentos e promoções","Custo alto sem retorno em retenção","Mix CLT e PJ gera desigualdade percebida"]},
+    {q:"A empresa tem ou quer remuneração variável?",opts:["Sim — bônus estruturado e comunicado","Temos mas sem critérios claros","Queremos implementar","Não está nos planos"]},
+    {q:"Há interesse em ILP (stock options)?",opts:["Sim — já temos ESOP","Interesse mas nunca fizemos","Não está nos planos"]},
+  ],
+  "people-analytics":[
+    {q:"Qual é a maturidade atual de People Analytics?",opts:["Descritivo — dados operacionais básicos","Diagnóstico — cruzamos dados","Preditivo — antecipamos riscos","Prescritivo — IA sugere ações"]},
+    {q:"Qual indicador mais impacta o negócio agora?",opts:["Turnover — custo alto de retenção","Engajamento — queda afeta produtividade","Qualidade das contratações","Produtividade — retorno do headcount"]},
+    {q:"Qual é o principal obstáculo para avançar?",opts:["Dados em sistemas diferentes","Falta de ferramenta — tudo em planilha","Time sem capacidade técnica","Liderança não usa dados para decisões"]},
+    {q:"Qual é o interesse em usar IA nos processos de RH?",opts:["Alto — já experimentamos","Médio — vemos valor mas não sabemos por onde","Cauteloso — dúvidas sobre privacidade","Baixo — não é prioridade"]},
+  ],
+  "dei":[
+    {q:"Qual é o estágio atual de DEI?",opts:["Área dedicada, metas e processos integrados","Ações pontuais sem estrutura formal","Começando — fase de diagnóstico e sensibilização"]},
+    {q:"Qual eixo de diversidade é prioridade?",opts:["Equidade de gênero","Diversidade racial","Inclusão de PCDs","LGBTQIA+","Todos os eixos integrados"]},
+    {q:"A empresa tem mais de 100 colaboradores?",opts:["Sim — cota PCD obrigatória","Não — mas queremos estruturar DEI"]},
+    {q:"Qual é o maior obstáculo para avançar?",opts:["Liderança não entende DEI como estratégico","Processos seletivos perpetuam vieses","Contratamos mas não retemos — cultura não inclusiva","Falta dados e métricas claras"]},
+  ],
+  "saude-mental":[
+    {q:"A empresa fez o mapeamento de riscos psicossociais (NR-01)?",opts:["Sim — PGR atualizado e documentado","Estamos iniciando","Não — precisamos adequar com urgência"]},
+    {q:"Quais sinais de adoecimento são mais visíveis?",opts:["Absenteísmo elevado","Alta rotatividade com menção a burnout","Queda de performance em áreas específicas","Não temos dados"]},
+    {q:"O que existe de estrutura de saúde mental hoje?",opts:["Plataforma de psicologia (Zenklub, Vittude)","Ações pontuais sem continuidade","Cobertura no plano de saúde","Não temos nada"]},
+    {q:"Os líderes estão preparados para identificar adoecimento?",opts:["Sim — treinados com protocolo","Parcialmente","Não — precisamos capacitar"]},
+  ],
+  "dp":[
+    {q:"Qual é o principal gargalo do DP hoje?",opts:["Folha com erros ou atrasos","Conformidade com eSocial","Gestão de férias — vencimentos perdidos","Admissões e rescisões com risco trabalhista"]},
+    {q:"Como está a integração com o eSocial?",opts:["Totalmente integrado","Parcialmente — ajustes manuais","Não integrado — enviamos manualmente"]},
+    {q:"A empresa tem colaboradores PJ além dos CLTs?",opts:["Sim — mais de 30%","Alguns — menos de 30%","Não — todos CLT"]},
+    {q:"Qual obrigação acessória gera mais insegurança?",opts:["eSocial e DCTFWeb","Gestão de férias e avisos","FGTS e INSS","Rescisões e cálculos finais"]},
+  ],
+  "incentivos":[
+    {q:"O que o programa de incentivos precisa endereçar?",opts:["Crescimento — compartilhar o sucesso","Retenção — segurar pessoas críticas","Produtividade — incentivar performance","Comportamento cultural","Metas comerciais"]},
+    {q:"Qual modelo de incentivo faz mais sentido?",opts:["Bônus anual por performance","Variável mensal ou trimestral","Stock options ou ESOP","PLR","Não sei — quero recomendação"]},
+    {q:"Quem seria elegível ao programa?",opts:["Todos os colaboradores","Liderança — coordenadores para cima","Top performers e key people","Time comercial"]},
+    {q:"Qual é o orçamento previsto?",opts:["Até 5% da folha","5 a 15% da folha","Mais de 15% da folha","Ainda não definido"]},
+  ],
+  "engajamento":[
+    {q:"Qual é o nível atual de engajamento?",opts:["eNPS acima de 50 — ótimo","eNPS 20 a 50 — bom","eNPS 0 a 20 — zona de alerta","eNPS negativo — crise","Não medimos"]},
+    {q:"Qual driver de desengajamento é mais crítico?",opts:["Qualidade da liderança direta","Falta de reconhecimento","Falta de clareza de carreira","Remuneração abaixo do mercado","Cultura tóxica"]},
+    {q:"Com que frequência medem engajamento?",opts:["Pulse mensal ou quinzenal","Semestral","Anual","Não medimos"]},
+    {q:"O que acontece após a pesquisa?",opts:["Plano de ação público com responsáveis","Plano existe mas fica na gaveta","Resultados apresentados sem ação","Pessoas nem sabem o resultado"]},
+  ],
+  "onboarding":[
+    {q:"Como está o onboarding hoje?",opts:["Estruturado com plano de 90 dias","Existe mas cada gestor adapta","Informal — novo colaborador se vira","Não temos processo"]},
+    {q:"Qual é o maior problema no onboarding?",opts:["Alta rotatividade no período de experiência","Rampagem lenta — demora para ser produtivo","Experiência ruim nos primeiros dias","Cultura não transmitida"]},
+    {q:"O onboarding é diferenciado por senioridade?",opts:["Sim — líderes têm processo específico","Não — mesmo processo para todos","Queremos criar essa diferenciação"]},
+    {q:"Quem é responsável pelo onboarding?",opts:["RH estrutura e conduz","RH e gestor compartilham","Gestor conduz sozinho","Não há responsável definido"]},
+  ],
+};
+
+const CTX={
+  "rh-estrategico":"planejamento estratégico de RH, Playing to Win, OKRs, tese de talento, Kill-Scale-Incubate, storytelling do PE",
+  "rs":"recrutamento e seleção, RPO/headhunter/interno/Bar Raiser, quality of hire, time-to-fill, cost-per-hire",
+  "performance":"gestão de performance, calibração top-down, 9box, devolutiva separada de remuneração, Qulture Rocks, KPI.com",
+  "talentos":"RPKS Right People Key Seats Jim Collins, posições críticas, sucessão ready-now/1-2y/3-5y, key people, comitê executivo CEO",
+  "carreira":"trilhas de carreira, levels, competências core transversais, implementação gradual, integração com R&S",
+  "lideranca":"desenvolvimento de liderança, onboarding 90 dias documento vivo, 1:1 quinzenal, LNPS, peer learning, Ask Me Anything",
+  "tnd":"T&D, LNT com entrevistas profundas, Kirkpatrick 4 níveis, PDI 70-20-10, Learning Day, trilhas mistas",
+  "cultura":"cultura, ADKAR Prosci, McKinsey 4 building blocks, Culture Map Erin Meyer, Walk the Talk, turnover cultural",
+  "remuneracao":"remuneração, pesquisa salarial +20% PJ L5+, faixas 40-50% amplitude, ESOP 3 cenários, RSU, filosofia de comp",
+  "people-analytics":"people analytics ELTV/WPR/quality of hire, NLP em pesquisas de clima, IA com Lovable/Claude, análise de sentimentos",
+  "dei":"DEI, Lei 14.611/2023 equidade salarial 100+, cota PCD Lei 8.213/91 2-5%, grupos de afinidade",
+  "saude-mental":"NR-01 riscos psicossociais mai/2025, fiscalização mai/2026, PGR obrigatório, COPSOQ-BR, multa R$6.708",
+  "dp":"CLT pós-reforma 2017, eSocial S-1.3, folha, férias 30 dias antecedência, 13º, rescisão 10 dias corridos, DCTFWeb, FGTS 8%",
+  "incentivos":"ESOP 3 cenários com calculadora, RSU pós-risco, PLR, bônus performance, filosofia de comp antes do modelo",
+  "engajamento":"eNPS, drivers de engajamento, pesquisa de clima profunda, plano de ação transparente, análise de sentimentos",
+  "onboarding":"onboarding 90 dias, guia documento vivo, mapa de stakeholders, expectativas mútuas, diferenciação por senioridade",
+};
+
+let ctx={},curMod=null,ans=[],curQ=0,hist=[],outData=null;
+let chatOpen=false,mkTyping=false,mkCtx='',mkHist=[];
+
+// Landing modules
+document.getElementById('mods-land').innerHTML=MODS.map(m=>
+  `<div class="mp" onclick="goTo('setup')">
+    <div style="font-size:15px;margin-bottom:7px;opacity:.7">${m.icon}</div>
+    <div style="font-size:11px;font-weight:400;color:var(--ch)">${m.title}</div>
+    <div style="font-size:10px;color:var(--st2);margin-top:2px;font-weight:300">${m.sub}</div>
+  </div>`).join('');
+
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('s-'+s).classList.add('active');
+  window.scrollTo(0,0);
+  const nc=document.getElementById('nav-co');
+  const nb=document.getElementById('nav-back');
+  const nt=document.getElementById('nav-cta');
+  const mb=document.getElementById('mk-btn');
+  if(ctx.name){nc.textContent=ctx.name;nc.style.display='flex';}else{nc.style.display='none';}
+  nb.style.display=(s==='diag'||s==='output')?'inline-flex':'none';
+  nt.style.display=(s==='landing')?'inline-flex':'none';
+  mb.style.display=(s!=='landing'&&ctx.name)?'flex':'none';
+  if(s==='dashboard')renderDash();
+}
+
+// SETUP
+const STIT=['Sobre sua empresa','Como a empresa opera','O time de RH','Urgência e histórico'];
+const SSUB=['Essas informações personalizam cada diagnóstico.','Momento financeiro e modelo de trabalho.','Quem vai executar e maturidade do RH.','Calibra urgência e evita repetir erros.'];
+function rDots(step){
+  document.getElementById('sdots').innerHTML=[1,2,3,4].map(i=>`<div class="sdot ${i<step?'done':i===step?'act':''}"></div>`).join('');
+  document.getElementById('sh').textContent=STIT[step-1];
+  document.getElementById('sp').textContent=SSUB[step-1];
+}
+rDots(1);
+
+function sNext(s){
+  const f={1:['cx-name','cx-setor','cx-size'],2:['cx-modelo','cx-estagio','cx-fin'],3:['cx-matur','cx-rhsize','cx-cargo']};
+  if(f[s]){for(const id of f[s]){if(!document.getElementById(id).value){alert('Preencha todos os campos.');return;}}}
+  if(s===1){ctx.name=document.getElementById('cx-name').value.trim();ctx.setor=document.getElementById('cx-setor').value;ctx.size=document.getElementById('cx-size').value;ctx.cor=document.getElementById('cx-cor').value;}
+  else if(s===2){ctx.modelo=document.getElementById('cx-modelo').value;ctx.estagio=document.getElementById('cx-estagio').value;ctx.financeiro=document.getElementById('cx-fin').value;}
+  else if(s===3){ctx.maturidade=document.getElementById('cx-matur').value;ctx.rhsize=document.getElementById('cx-rhsize').value;ctx.cargo=document.getElementById('cx-cargo').value;}
+  document.getElementById('ss'+s).style.display='none';
+  document.getElementById('ss'+(s+1)).style.display='block';
+  rDots(s+1);
+}
+function sBack(s){document.getElementById('ss'+s).style.display='none';document.getElementById('ss'+(s-1)).style.display='block';rDots(s-1);}
+function finishSetup(){
+  if(!document.getElementById('cx-urg').value||!document.getElementById('cx-orc').value){alert('Preencha todos os campos.');return;}
+  ctx.urgencia=document.getElementById('cx-urg').value;
+  ctx.orcamento=document.getElementById('cx-orc').value;
+  ctx.historico=document.getElementById('cx-hist').value;
+  initMoku();
+  goTo('dashboard');
+}
+
+// DASHBOARD
+function renderDash(){
+  const h=new Date().getHours();
+  document.getElementById('dgreet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+(ctx.cargo||'').split('/')[0].trim();
+  document.getElementById('dco').innerHTML=`
+    <div>
+      <div style="font-size:14px;font-weight:400;color:rgba(247,244,238,0.95);margin-bottom:3px">${ctx.name}</div>
+      <div style="font-size:11px;color:rgba(247,244,238,0.45);font-weight:300">${ctx.setor} · ${ctx.size} · ${ctx.modelo||''}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end">
+      ${[ctx.estagio?.split('—')[0]?.trim(),ctx.financeiro?.split('—')[0]?.trim(),ctx.rhsize].filter(Boolean).map(c=>`<span style="font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(247,244,238,0.08);color:rgba(247,244,238,0.6);border:1px solid rgba(247,244,238,0.1);font-weight:300">${c}</span>`).join('')}
+    </div>`;
+  document.getElementById('dgrid').innerHTML=MODS.map(m=>
+    `<div class="mc" onclick="startMod('${m.id}')">
+      <div style="font-size:18px">${m.icon}</div>
+      <div><div style="font-size:12px;font-weight:500;margin-bottom:2px">${m.title}</div><div style="font-size:10px;color:var(--st2);font-weight:300">${m.sub}</div></div>
+      <div style="font-size:10px;color:var(--st3);margin-top:auto">→</div>
+    </div>`).join('');
+  renderHist();
+}
+
+function renderHist(){
+  const list=document.getElementById('hlist'),emp=document.getElementById('hemp'),tit=document.getElementById('htit');
+  if(!hist.length){list.innerHTML='';emp.style.display='block';tit.style.display='none';return;}
+  emp.style.display='none';tit.style.display='block';
+  list.innerHTML=[...hist].reverse().map((h,i)=>
+    `<div class="hi" onclick="viewH(${hist.length-1-i})">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;border-radius:6px;background:var(--sd);display:flex;align-items:center;justify-content:center;font-size:12px">${h.icon}</div>
+        <div><div style="font-size:12px;font-weight:400">${h.title}</div><div style="font-size:10px;color:var(--st2);font-weight:300">${h.date}</div></div>
+      </div>
+      <span class="tag tg-ms">Gerado</span>
+    </div>`).join('');
+}
+function viewH(i){curMod=hist[i].moduleId;outData=hist[i].output;renderOut();goTo('output');}
+
+// DIAGNÓSTICO
+function startMod(id){curMod=id;const qs=QS[id]||[];ans=Array(qs.length).fill(null);curQ=0;renderQ();goTo('diag');}
+
+function renderQ(){
+  const mod=MODS.find(m=>m.id===curMod),qs=QS[curMod],q=qs[curQ],tot=qs.length;
+  document.getElementById('dprog').style.width=Math.round((curQ/tot)*100)+'%';
+  document.getElementById('dmod').innerHTML=`<span style="font-size:15px">${mod.icon}</span><span style="font-size:11px;font-weight:500">${mod.title}</span><span style="font-size:10px;color:var(--st2);margin-left:auto;font-weight:300">${curQ+1} / ${tot}</span>`;
+  document.getElementById('qtxt').textContent=q.q;
+  document.getElementById('opts').innerHTML=q.opts.map(o=>{
+    const sel=ans[curQ]===o;
+    return `<button onclick="selA('${o.replace(/'/g,"\\'")}') " style="width:100%;text-align:left;padding:12px 16px;background:${sel?'var(--ch)':'var(--off)'};border:1px solid ${sel?'var(--ch)':'var(--bd2)'};border-radius:var(--r);font-family:inherit;font-size:12px;color:${sel?'rgba(247,244,238,0.9)':'var(--ch)'};cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;font-weight:300"
+      onmouseover="if(!this.dataset.s){this.style.borderColor='var(--ch)';this.style.background='var(--sd)'}"
+      onmouseout="if(!this.dataset.s){this.style.borderColor='var(--bd2)';this.style.background='var(--off)'}"
+      data-s="${sel?'1':''}">
+      <span style="width:16px;height:16px;border-radius:50%;border:1px solid ${sel?'rgba(247,244,238,0.5)':'var(--st3)'};display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;background:${sel?'rgba(247,244,238,0.1)':'transparent'};color:${sel?'rgba(247,244,238,0.9)':'var(--st3)'}">${sel?'✓':''}</span>${o}</button>`;
+  }).join('');
+  const last=curQ===tot-1;
+  document.getElementById('bprev').style.display=curQ>0?'inline-flex':'none';
+  document.getElementById('bnext').style.display=(!last&&ans[curQ])?'inline-flex':'none';
+  document.getElementById('bgen').style.display=(last&&ans[curQ])?'inline-flex':'none';
+}
+function selA(v){ans[curQ]=v;renderQ();}
+function nextQ(){if(!ans[curQ])return;curQ++;renderQ();window.scrollTo(0,0);}
+function prevQ(){curQ--;renderQ();window.scrollTo(0,0);}
+
+// GENERATE
+async function genPlan(){
+  goTo('loading');
+  const steps=['Processando contexto da empresa','Analisando respostas do diagnóstico','Consultando base de conhecimento de RH','Estruturando plano personalizado','Preparando narrativa e entregáveis'];
+  let ai=0;
+  document.getElementById('lstps').innerHTML=steps.map((s,i)=>`<div id="ls${i}" style="display:flex;align-items:center;gap:10px;font-size:11px;padding:9px 0;border-bottom:${i<steps.length-1?'1px solid var(--bd)':'none'};color:var(--st2);transition:color .3s;font-weight:300"><span id="li${i}" style="font-size:12px;width:14px;text-align:center;color:var(--st3)">○</span>${s}</div>`).join('');
+  const anim=setInterval(()=>{
+    if(ai<steps.length){
+      if(ai>0){document.getElementById('ls'+(ai-1)).style.color='var(--ms)';document.getElementById('li'+(ai-1)).textContent='✓';document.getElementById('li'+(ai-1)).style.color='var(--ms)';}
+      document.getElementById('ls'+ai).style.color='var(--ch)';document.getElementById('li'+ai).textContent='◉';document.getElementById('li'+ai).style.color='var(--ch)';ai++;
+    }
+  },1200);
+
+  const mod=MODS.find(m=>m.id===curMod),qs=QS[curMod];
+  const qa=qs.map((q,i)=>`${q.q}\nResposta: ${ans[i]||'não respondida'}`).join('\n\n');
+
+  const prompt=`Você é um consultor sênior de RH com 15 anos de experiência. Especialização: ${CTX[curMod]}.
+Tom: preciso, calmo, objetivo. Nunca use entusiasmo excessivo. Prefira "identificamos" a "vamos transformar". Como um consultor experiente, não um chatbot.
+
+CONTEXTO:
+- Empresa: ${ctx.name} | Setor: ${ctx.setor} | Tamanho: ${ctx.size}
+- Modelo: ${ctx.modelo||'não informado'} | Estágio: ${ctx.estagio||'não informado'}
+- Momento financeiro: ${ctx.financeiro||'não informado'}
+- Time de RH: ${ctx.rhsize||'não informado'} | Cargo: ${ctx.cargo||'não informado'}
+- Maturidade RH: ${ctx.maturidade||'não informado'}
+- Urgência: ${ctx.urgencia||'não informado'} | Orçamento: ${ctx.orcamento||'não informado'}
+- Tentativas anteriores: ${ctx.historico||'nenhuma'}
+
+DIAGNÓSTICO — ${mod.title}:
+${qa}
+
+Responda APENAS com JSON válido sem markdown:
+{"titulo":"Título específico e preciso","diagnostico":"3-4 frases de análise precisa mencionando o nome da empresa. Tom consultivo.","recomendacao_principal":"Recomendação estratégica considerando orçamento, urgência e quem executa.","plano":[{"fase":"Fundação","prazo":"0–30 dias","acoes":["ação concreta 1","ação 2","ação 3"]},{"fase":"Estruturação","prazo":"30–90 dias","acoes":["ação 1","ação 2","ação 3"]},{"fase":"Consolidação","prazo":"90–180 dias","acoes":["ação 1","ação 2"]}],"riscos":["risco 1","risco 2","risco 3"],"kpis":["KPI com meta 1","KPI 2","KPI 3"],"proximos_passos":["ação esta semana","ação próximas 2 semanas","ação próximo mês"],"alerta_legal":"alerta legal relevante ou null","benchmark":"dado de mercado real","comunicacao_interna":"Template 3-4 linhas para comunicar o processo aos colaboradores.","narrativa_gestor":{"contexto":"Como apresentar ao gestor em 2-3 linhas. Foco em impacto no negócio.","argumentos":["argumento com dado 1","argumento 2","argumento 3"],"objecoes":[{"objecao":"Objeção típica","resposta":"Resposta com dados"},{"objecao":"Segunda objeção","resposta":"Resposta preparada"}],"proposta":"O que pedir exatamente. Uma frase direta."},"checklist":[{"etapa":"Antes de começar","itens":["item 1","item 2","item 3"]},{"etapa":"Primeiros 30 dias","itens":["item 1","item 2","item 3"]},{"etapa":"Para não esquecer","itens":["item 1","item 2"]}],"erros_comuns":[{"erro":"Erro clássico 1","como_evitar":"Como evitar"},{"erro":"Erro 2","como_evitar":"Como evitar"},{"erro":"Erro 3","como_evitar":"Como evitar"},{"erro":"Erro 4","como_evitar":"Como evitar"}]}`;
+
+  try{
+    const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    clearInterval(anim);
+    if(data.error){throw new Error(data.error);}
+    const raw=data.content?.[0]?.text||'{}';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}
+    catch(e){parsed={titulo:mod.title,diagnostico:'Erro ao processar resposta.',plano:[],riscos:[],kpis:[],proximos_passos:[],narrativa_gestor:{},checklist:[],erros_comuns:[]};}
+    outData=parsed;
+    const now=new Date();
+    hist.push({moduleId:curMod,title:mod.title,icon:mod.icon,date:now.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),output:parsed});
+    updMokuCtx(mod.title,parsed);
+    setTimeout(()=>{renderOut();goTo('output');},700);
+  }catch(e){
+    clearInterval(anim);
+    console.error(e);
+    alert('Erro ao gerar o diagnóstico. Verifique a conexão e tente novamente.');
+    goTo('diag');
+  }
+}
+
+// OUTPUT
+function showTab(t){
+  ['plano','gestor','checklist','erros'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['plano','gestor','checklist','erros'][i]===t));
+}
+
+function renderOut(){
+  const mod=MODS.find(m=>m.id===curMod),d=outData;
+  if(!d)return;
+  document.getElementById('ohero').innerHTML=`
+    <span class="tag tg-ms" style="margin-bottom:14px;display:inline-flex">Diagnóstico gerado · ${mod.title}</span>
+    <h1 style="font-size:clamp(16px,2.5vw,24px);margin-bottom:7px;line-height:1.2">${d.titulo||mod.title}</h1>
+    <p style="font-size:11px;color:var(--st2)">${ctx.name} · ${ctx.setor} · ${ctx.size}</p>`;
+
+  // PLANO
+  let tp=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico">◎</div><h3>Diagnóstico</h3></div><p style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:14px;color:var(--ch);line-height:1.8;font-weight:400">${d.diagnostico||''}</p>${d.recomendacao_principal?`<div class="rec"><p>${d.recomendacao_principal}</p></div>`:''}</div>`;
+  if(d.plano?.length){
+    tp+=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico">⊞</div><h3>Plano de ação</h3></div>`;
+    d.plano.forEach((f,i)=>{tp+=`<div class="ph"><div class="ph-hdr"><div class="ph-n">${i+1}</div><span class="ph-nm">${f.fase}</span><span class="ph-bd">${f.prazo}</span></div><div class="ph-body">${(f.acoes||[]).map(a=>`<div class="ph-act"><span style="color:var(--st3);flex-shrink:0;font-size:10px;margin-top:2px">→</span>${a}</div>`).join('')}</div></div>`;});
+    tp+=`</div>`;
+  }
+  if(d.riscos?.length||d.kpis?.length){
+    tp+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">`;
+    if(d.riscos?.length)tp+=`<div class="card"><div class="chdr"><div class="cico" style="background:var(--cu2)">△</div><h3>Riscos</h3></div><div style="display:flex;flex-wrap:wrap;gap:5px">${d.riscos.map(r=>`<span class="tag tg-cu">${r}</span>`).join('')}</div></div>`;
+    if(d.kpis?.length)tp+=`<div class="card"><div class="chdr"><div class="cico" style="background:var(--ms3)">◈</div><h3>KPIs</h3></div><div style="display:flex;flex-wrap:wrap;gap:5px">${d.kpis.map(k=>`<span class="tag tg-ms">${k}</span>`).join('')}</div></div>`;
+    tp+=`</div>`;
+  }
+  if(d.proximos_passos?.length)tp+=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico">▷</div><h3>Próximos passos</h3></div>${d.proximos_passos.map((p,i)=>`<div class="nxt"><span class="nxt-n">${i+1}</span>${p}</div>`).join('')}</div>`;
+  if(d.comunicacao_interna)tp+=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico" style="background:var(--ms3)">✉</div><h3>Comunicação interna</h3></div><div style="background:var(--sd);border-radius:var(--r);padding:12px;font-size:12px;color:var(--st);line-height:1.7;font-weight:300;font-style:italic">"${d.comunicacao_interna}"</div></div>`;
+  if(d.alerta_legal)tp+=`<div class="alrt" style="margin-bottom:10px"><span style="font-size:13px;flex-shrink:0">⚖</span><p><strong>Atenção legal:</strong> ${d.alerta_legal}</p></div>`;
+  if(d.benchmark)tp+=`<div class="bnch"><span style="font-size:13px;flex-shrink:0;color:var(--st2)">◉</span><p><strong>Benchmark:</strong> ${d.benchmark}</p></div>`;
+  document.getElementById('tab-plano').innerHTML=tp;
+
+  // GESTOR
+  const ng=d.narrativa_gestor||{};
+  let tg=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico">◎</div><h3>Como apresentar ao gestor</h3></div>${ng.contexto?`<div style="background:var(--sd);border-radius:var(--r);padding:12px 14px;margin-bottom:14px"><p style="font-size:12px;font-style:italic;font-weight:300">"${ng.contexto}"</p></div>`:''}${ng.argumentos?.length?`<div style="margin-bottom:14px"><div class="lbl" style="margin-bottom:8px">Argumentos de negócio</div>${ng.argumentos.map((a,i)=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;line-height:1.5;font-weight:300"><span style="width:16px;height:16px;border-radius:3px;background:var(--ch);color:var(--cr);font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span>${a}</div>`).join('')}</div>`:''}${ng.proposta?`<div class="rec"><p>→ ${ng.proposta}</p></div>`:''}</div>`;
+  if(ng.objecoes?.length){tg+=`<div class="card"><div class="chdr"><div class="cico" style="background:var(--cu2)">◇</div><h3>Objeções e como responder</h3></div>`;ng.objecoes.forEach(o=>{tg+=`<div class="obj"><div class="obj-q">❝ ${o.objecao}</div><div class="obj-a">→ ${o.resposta}</div></div>`;});tg+=`</div>`;}
+  document.getElementById('tab-gestor').innerHTML=tg;
+
+  // CHECKLIST
+  let tc='';
+  if(d.checklist?.length){d.checklist.forEach((et,ei)=>{tc+=`<div class="card" style="margin-bottom:10px"><div class="chdr"><div class="cico" style="background:var(--ms3);color:var(--ms);font-size:11px;font-weight:500">${ei+1}</div><h3>${et.etapa}</h3></div>${(et.itens||[]).map(it=>`<div class="chk"><div class="chk-box"></div><span class="chk-txt">${it}</span></div>`).join('')}</div>`;});}
+  else{tc='<div class="card"><p>Checklist não disponível.</p></div>';}
+  document.getElementById('tab-checklist').innerHTML=tc;
+
+  // ERROS
+  let te='';
+  if(d.erros_comuns?.length){te+=`<div class="card"><div class="chdr"><div class="cico" style="background:var(--cu2)">✕</div><h3>Erros comuns — e como evitá-los</h3></div>`;d.erros_comuns.forEach((e,i)=>{te+=`<div class="err" style="margin-bottom:${i<d.erros_comuns.length-1?'8px':'0'}"><div class="err-b"><span>✕</span>${e.erro}</div><div class="err-g"><span style="color:var(--ms)">✓</span>${e.como_evitar}</div></div>`;});te+=`</div>`;}
+  else{te='<div class="card"><p>Sem erros mapeados.</p></div>';}
+  document.getElementById('tab-erros').innerHTML=te;
+
+  showTab('plano');
+}
+
+// ── MOKU CHAT ────────────────────────────────────────────────────────────────
+function initMoku(){
+  mkCtx=`Você é o Moku, consultor de RH do sistema Kanso. Você já conhece o contexto desta empresa:
+- Nome: ${ctx.name} | Setor: ${ctx.setor} | Tamanho: ${ctx.size}
+- Estágio: ${ctx.estagio||'não informado'} | Momento financeiro: ${ctx.financeiro||'não informado'}
+- Time de RH: ${ctx.rhsize||'não informado'} | Cargo: ${ctx.cargo||'não informado'}
+- Maturidade RH: ${ctx.maturidade||'não informado'}
+- Urgência: ${ctx.urgencia||'não informado'} | Orçamento: ${ctx.orcamento||'não informado'}
+
+Tom: preciso, calmo, consultivo. Respostas curtas — máximo 4 linhas. Sem entusiasmo excessivo.`;
+  mkHist=[];
+  addMkMsg(`Olá. Estou a par do contexto da ${ctx.name}. O que você precisa?`);
+  rSugs(['O que priorizar primeiro?','Como engajar a liderança?','Qual o maior risco?']);
+}
+
+function updMokuCtx(title,plan){
+  if(!plan)return;
+  mkCtx+=`\n\nDiagnóstico mais recente — ${title}:
+Diagnóstico: ${plan.diagnostico||''}
+Recomendação: ${plan.recomendacao_principal||''}
+Próximos passos: ${(plan.proximos_passos||[]).join('; ')}
+Riscos: ${(plan.riscos||[]).join('; ')}`;
+  rSugs([`Aprofundar ${title}`,'Como apresentar ao CEO?','Por onde começar?','Quais os riscos maiores?']);
+}
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('mk-panel').classList.toggle('open',chatOpen);
+  if(chatOpen)setTimeout(()=>document.getElementById('mk-inp').focus(),100);
+}
+function openChat(){
+  chatOpen=true;
+  document.getElementById('mk-panel').classList.add('open');
+  if(curMod&&outData)rSugs(['Aprofundar o plano','Como apresentar ao CEO?','Qual o primeiro passo prático?','Quais os riscos maiores?']);
+  setTimeout(()=>document.getElementById('mk-inp').focus(),100);
+}
+
+function mkAvatar(){
+  return `<div class="msg-av"><svg width="16" height="18" viewBox="0 0 90 100" fill="none"><rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC"/><ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/><ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/></svg></div>`;
+}
+
+function addMkMsg(text){
+  mkHist.push({role:'assistant',content:text});
+  const el=document.createElement('div');
+  el.className='msg mk';
+  el.innerHTML=`${mkAvatar()}<div class="mb">${text}</div>`;
+  document.getElementById('mk-msgs').appendChild(el);
+  document.getElementById('mk-msgs').scrollTop=9999;
+}
+function addUsrMsg(text){
+  mkHist.push({role:'user',content:text});
+  const el=document.createElement('div');
+  el.className='msg usr';
+  el.innerHTML=`<div class="mb">${text}</div>`;
+  document.getElementById('mk-msgs').appendChild(el);
+  document.getElementById('mk-msgs').scrollTop=9999;
+}
+function showTyping(){
+  const el=document.createElement('div');
+  el.className='msg mk';el.id='mk-typing';
+  el.innerHTML=`${mkAvatar()}<div class="mb"><span class="ty-dot"></span><span class="ty-dot"></span><span class="ty-dot"></span></div>`;
+  document.getElementById('mk-msgs').appendChild(el);
+  document.getElementById('mk-msgs').scrollTop=9999;
+}
+function hideTyping(){const t=document.getElementById('mk-typing');if(t)t.remove();}
+
+function rSugs(sugs){
+  document.getElementById('mk-sugs').innerHTML=sugs.map(s=>`<button class="sg" onclick="sendSug('${s.replace(/'/g,"\\'")}') ">${s}</button>`).join('');
+}
+function sendSug(t){document.getElementById('mk-inp').value=t;sendChat();}
+
+async function sendChat(){
+  const inp=document.getElementById('mk-inp');
+  const text=inp.value.trim();
+  if(!text||mkTyping)return;
+  inp.value='';inp.style.height='auto';
+  mkTyping=true;
+  addUsrMsg(text);
+  document.getElementById('mk-sugs').innerHTML='';
+  showTyping();
+
+  const msgs=mkHist.slice(-10).slice(0,-1).map(m=>({role:m.role,content:m.content}));
+  msgs.push({role:'user',content:text});
+
+  try{
+    const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:mkCtx,messages:msgs,max_tokens:400})});
+    const data=await res.json();
+    hideTyping();
+    if(data.error){addMkMsg('Erro na conexão. Tente novamente.');}
+    else{const reply=data.content?.[0]?.text||'Não consegui processar.';addMkMsg(reply);}
+    mkTyping=false;
+    rSugs(['Detalhar mais','Como implementar?','Quais os riscos?','Próximo passo imediato']);
+  }catch(e){
+    hideTyping();addMkMsg('Erro na conexão. Tente novamente.');mkTyping=false;
+  }
+}
+function mkKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function mkResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+
+// ── EXPORTAÇÃO DE DOCUMENTOS COM MARCA ───────────────────────────────────────
+document.getElementById('cx-logo').addEventListener('change',function(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=function(ev){ctx.logo=ev.target.result;};
+  r.readAsDataURL(f);
+});
+
+function brandCor(){return (ctx.cor||'#1B1B1B').replace('#','').toUpperCase();}
+function fileSafe(s){return (s||'empresa').replace(/[^a-zA-Z0-9]+/g,'_').slice(0,40);}
+
+function pSlideBase(p){
+  const s=p.addSlide();
+  s.background={color:'FFFFFF'};
+  s.addText('',{x:0,y:0,w:13.33,h:0.14,fill:{color:brandCor()}});
+  if(ctx.logo){try{s.addImage({data:ctx.logo,x:12.1,y:0.32,w:0.85,h:0.85,sizing:{type:'contain',w:0.85,h:0.85}});}catch(e){}}
+  return s;
+}
+
+async function genPPTX(){
+  if(!outData){alert('Gere um diagnóstico primeiro.');return;}
+  if(typeof PptxGenJS==='undefined'){alert('Biblioteca carregando — tente novamente em alguns segundos.');return;}
+  const d=outData,mod=MODS.find(m=>m.id===curMod),cor=brandCor();
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const p=new PptxGenJS();
+  p.layout='LAYOUT_WIDE';
+
+  // Slide 1 — Capa
+  let s=p.addSlide();s.background={color:'FFFFFF'};
+  s.addText('',{x:0,y:0,w:0.35,h:7.5,fill:{color:cor}});
+  if(ctx.logo){try{s.addImage({data:ctx.logo,x:1,y:0.7,w:1.1,h:1.1,sizing:{type:'contain',w:1.1,h:1.1}});}catch(e){}}
+  s.addText((mod?mod.title:'Diagnóstico')+'  ·  '+hoje,{x:1,y:2.35,w:11,h:0.4,fontSize:13,color:'7A7670'});
+  s.addText(d.titulo||'Plano estruturado',{x:1,y:2.85,w:11.5,h:1.8,fontSize:32,bold:true,color:'1B1B1B'});
+  s.addText(ctx.name+' · '+ctx.setor+' · '+ctx.size,{x:1,y:4.75,w:11,h:0.5,fontSize:15,color:'7A7670'});
+  s.addText('Diagnóstico estruturado · gerado com Kanso',{x:1,y:6.85,w:11,h:0.35,fontSize:10,color:'9E9A94'});
+
+  // Slide 2 — Contexto
+  s=pSlideBase(p);
+  s.addText('Contexto da empresa',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  const facts=[['Setor',ctx.setor],['Tamanho',ctx.size],['Modelo de trabalho',ctx.modelo],['Estágio',ctx.estagio],['Momento financeiro',ctx.financeiro],['Time de RH',ctx.rhsize],['Maturidade de RH',ctx.maturidade],['Urgência',ctx.urgencia]];
+  facts.forEach(function(f,i){
+    const col=i%2,row=Math.floor(i/2);
+    const x=0.7+col*6.3,y=1.55+row*1.3;
+    s.addText((f[0]||'').toUpperCase(),{x:x,y:y,w:5.8,h:0.3,fontSize:10,color:cor,bold:true,charSpacing:2});
+    s.addText(f[1]||'—',{x:x,y:y+0.32,w:5.8,h:0.7,fontSize:13,color:'2E2E2E'});
+  });
+
+  // Slide 3 — Diagnóstico
+  s=pSlideBase(p);
+  s.addText('Diagnóstico',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  s.addText(d.diagnostico||'',{x:0.7,y:1.5,w:11.9,h:2.7,fontSize:15,color:'2E2E2E',italic:true,lineSpacing:24});
+  if(d.recomendacao_principal){
+    s.addText('RECOMENDAÇÃO PRINCIPAL',{x:0.7,y:4.35,w:11.9,h:0.35,fontSize:11,color:cor,bold:true,charSpacing:2});
+    s.addText(d.recomendacao_principal,{x:0.7,y:4.75,w:11.9,h:1.9,fontSize:14,color:'FFFFFF',fill:{color:cor},lineSpacing:20,margin:14});
+  }
+
+  // Slide 4 — Plano de ação
+  s=pSlideBase(p);
+  s.addText('Plano de ação',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  (d.plano||[]).slice(0,3).forEach(function(f,i){
+    const x=0.7+i*4.25;
+    s.addText((i+1)+'. '+(f.fase||''),{x:x,y:1.55,w:3.95,h:0.45,fontSize:14,bold:true,color:'1B1B1B'});
+    s.addText(f.prazo||'',{x:x,y:2.0,w:3.95,h:0.3,fontSize:11,color:cor,bold:true});
+    const items=(f.acoes||[]).map(function(a){return{text:a,options:{bullet:true,breakLine:true,fontSize:11,color:'5F5E5A'}};});
+    if(items.length)s.addText(items,{x:x,y:2.4,w:3.95,h:4.4,lineSpacing:16});
+  });
+
+  // Slide 5 — Riscos e KPIs
+  s=pSlideBase(p);
+  s.addText('Riscos e indicadores',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  s.addText('RISCOS',{x:0.7,y:1.55,w:5.8,h:0.35,fontSize:11,color:'8B5E3C',bold:true,charSpacing:2});
+  const rk=(d.riscos||[]).map(function(r){return{text:r,options:{bullet:true,breakLine:true,fontSize:12,color:'2E2E2E'}};});
+  if(rk.length)s.addText(rk,{x:0.7,y:2.0,w:5.8,h:4.2,lineSpacing:20});
+  s.addText('KPIS',{x:6.95,y:1.55,w:5.8,h:0.35,fontSize:11,color:cor,bold:true,charSpacing:2});
+  const kp=(d.kpis||[]).map(function(k){return{text:k,options:{bullet:true,breakLine:true,fontSize:12,color:'2E2E2E'}};});
+  if(kp.length)s.addText(kp,{x:6.95,y:2.0,w:5.8,h:4.2,lineSpacing:20});
+
+  // Slide 6 — Próximos passos
+  s=pSlideBase(p);
+  s.addText('Próximos passos',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  (d.proximos_passos||[]).forEach(function(px,i){
+    s.addText(String(i+1),{x:0.7,y:1.7+i*1.15,w:0.55,h:0.55,fontSize:14,bold:true,color:'FFFFFF',fill:{color:cor},align:'center',valign:'middle'});
+    s.addText(px,{x:1.45,y:1.65+i*1.15,w:11,h:0.7,fontSize:13,color:'2E2E2E',valign:'middle'});
+  });
+
+  // Slide 7 — Para aprovação
+  const ng=d.narrativa_gestor||{};
+  s=pSlideBase(p);
+  s.addText('Para aprovação',{x:0.7,y:0.55,w:11,h:0.6,fontSize:24,bold:true,color:'1B1B1B'});
+  if(ng.contexto)s.addText('"'+ng.contexto+'"',{x:0.7,y:1.45,w:11.9,h:1.1,fontSize:13,italic:true,color:'5F5E5A',lineSpacing:18});
+  s.addText('ARGUMENTOS DE NEGÓCIO',{x:0.7,y:2.7,w:11.9,h:0.35,fontSize:11,color:cor,bold:true,charSpacing:2});
+  const ag=(ng.argumentos||[]).map(function(a){return{text:a,options:{bullet:true,breakLine:true,fontSize:12,color:'2E2E2E'}};});
+  if(ag.length)s.addText(ag,{x:0.7,y:3.1,w:11.9,h:2.1,lineSpacing:18});
+  if(ng.proposta)s.addText('Pedido:  '+ng.proposta,{x:0.7,y:5.4,w:11.9,h:1.2,fontSize:13,color:'FFFFFF',fill:{color:cor},lineSpacing:18,margin:14});
+
+  // Slide 8 — Fechamento
+  s=p.addSlide();s.background={color:'1B1B1B'};
+  if(ctx.logo){try{s.addImage({data:ctx.logo,x:5.92,y:1.5,w:1.5,h:1.5,sizing:{type:'contain',w:1.5,h:1.5}});}catch(e){}}
+  s.addText('Estrutura cria clareza.',{x:0,y:3.4,w:13.33,h:0.8,fontSize:28,bold:true,color:'F7F4EE',align:'center'});
+  s.addText(ctx.name+' · '+hoje,{x:0,y:4.4,w:13.33,h:0.4,fontSize:12,color:'9E9A94',align:'center'});
+  s.addText('Powered by Kanso',{x:0,y:6.9,w:13.33,h:0.3,fontSize:9,color:'7A7670',align:'center'});
+
+  await p.writeFile({fileName:'Kanso_'+fileSafe(ctx.name)+'_apresentacao.pptx'});
+}
+
+function genDOC(){
+  if(!outData){alert('Gere um diagnóstico primeiro.');return;}
+  const d=outData,mod=MODS.find(m=>m.id===curMod),cor=ctx.cor||'#1B1B1B';
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const ng=d.narrativa_gestor||{};
+  const sec=function(t){return '<h2 style="font-size:15pt;color:'+cor+';border-bottom:1pt solid '+cor+';padding-bottom:4pt;margin-top:24pt;font-weight:bold">'+t+'</h2>';};
+  let b='';
+  b+='<div style="border-left:6pt solid '+cor+';padding-left:14pt;margin-bottom:24pt">';
+  if(ctx.logo)b+='<img src="'+ctx.logo+'" style="height:48px"><br><br>';
+  b+='<p style="font-size:9pt;color:#7A7670;letter-spacing:2pt">'+((mod?mod.title:'').toUpperCase())+' · '+hoje+'</p>';
+  b+='<h1 style="font-size:22pt;color:#1B1B1B;margin:6pt 0">'+(d.titulo||'')+'</h1>';
+  b+='<p style="font-size:10pt;color:#7A7670">'+ctx.name+' · '+ctx.setor+' · '+ctx.size+'</p></div>';
+  b+=sec('Diagnóstico')+'<p style="font-style:italic">'+(d.diagnostico||'')+'</p>';
+  if(d.recomendacao_principal)b+='<table width="100%" style="background:'+cor+'" cellpadding="0" cellspacing="0"><tr><td style="padding:10pt;color:#ffffff;font-size:11pt">'+d.recomendacao_principal+'</td></tr></table>';
+  b+=sec('Plano de ação');
+  (d.plano||[]).forEach(function(f,i){
+    b+='<h3 style="font-size:12pt;margin-bottom:2pt">'+(i+1)+'. '+(f.fase||'')+' <span style="font-size:9pt;color:#7A7670;font-weight:normal">('+(f.prazo||'')+')</span></h3><ul>'+(f.acoes||[]).map(function(a){return '<li>'+a+'</li>';}).join('')+'</ul>';
+  });
+  if(d.riscos&&d.riscos.length)b+=sec('Riscos')+'<ul>'+d.riscos.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+  if(d.kpis&&d.kpis.length)b+=sec('KPIs')+'<ul>'+d.kpis.map(function(k){return '<li>'+k+'</li>';}).join('')+'</ul>';
+  if(d.proximos_passos&&d.proximos_passos.length)b+=sec('Próximos passos')+'<ol>'+d.proximos_passos.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>';
+  if(d.comunicacao_interna)b+=sec('Comunicação interna')+'<p style="font-style:italic;background:#F5F4F0;padding:8pt">"'+d.comunicacao_interna+'"</p>';
+  if(d.alerta_legal)b+=sec('Atenção legal')+'<p style="color:#8B5E3C">'+d.alerta_legal+'</p>';
+  if(d.benchmark)b+=sec('Benchmark de mercado')+'<p>'+d.benchmark+'</p>';
+  if(ng.contexto||(ng.argumentos&&ng.argumentos.length)){
+    b+=sec('Narrativa para o gestor');
+    if(ng.contexto)b+='<p style="font-style:italic">"'+ng.contexto+'"</p>';
+    if(ng.argumentos&&ng.argumentos.length)b+='<ol>'+ng.argumentos.map(function(a){return '<li>'+a+'</li>';}).join('')+'</ol>';
+    (ng.objecoes||[]).forEach(function(o){b+='<p><b style="color:#8B5E3C">Objeção:</b> '+o.objecao+'<br><b>Resposta:</b> '+o.resposta+'</p>';});
+    if(ng.proposta)b+='<p><b>Pedido de aprovação:</b> '+ng.proposta+'</p>';
+  }
+  if(d.checklist&&d.checklist.length){
+    b+=sec('Checklist de implementação');
+    d.checklist.forEach(function(et){b+='<h3 style="font-size:11pt">'+et.etapa+'</h3><ul style="list-style:none;padding-left:8pt">'+(et.itens||[]).map(function(i){return '<li>☐ '+i+'</li>';}).join('')+'</ul>';});
+  }
+  if(d.erros_comuns&&d.erros_comuns.length){
+    b+=sec('Erros comuns a evitar');
+    d.erros_comuns.forEach(function(e){b+='<p><b style="color:#8B5E3C">✕ '+e.erro+'</b><br>✓ '+e.como_evitar+'</p>';});
+  }
+  b+='<br><br><p style="font-size:8pt;color:#9E9A94;border-top:0.5pt solid #cccccc;padding-top:6pt">'+ctx.name+' · Documento gerado com Kanso · '+hoje+'</p>';
+  const html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>'+(d.titulo||'Plano')+'</title></head><body style="font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#2E2E2E;line-height:1.5">'+b+'</body></html>';
+  const blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Kanso_'+fileSafe(ctx.name)+'_plano.doc';
+  a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+}
+</script>
+</body>
+</html>
