@@ -217,25 +217,13 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
 
 <!-- MOKU CHAT BTN -->
 <button id="mk-btn" onclick="toggleChat()" aria-label="Abrir chat com o Moku">
-  <svg width="24" height="27" viewBox="0 0 90 100" fill="none">
-    <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1.5"/>
-    <ellipse cx="32" cy="44" rx="7" ry="7" fill="#FAFAF7"/>
-    <ellipse cx="58" cy="44" rx="7" ry="7" fill="#FAFAF7"/>
-    <ellipse cx="32" cy="44" rx="3" ry="3" fill="#2E2E2E"/>
-    <ellipse cx="58" cy="44" rx="3" ry="3" fill="#2E2E2E"/>
-  </svg>
+  <svg width="24" height="28" viewBox="0 0 90 104" fill="none"><path d="M45 12 Q45 4 45 2" stroke="#9FB59A" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M45 4 Q38 -2 33 3 Q37 9 45 5 Z" fill="#8FA98A"/><path d="M45 4 Q52 -2 57 3 Q53 9 45 5 Z" fill="#6B7F65"/><rect x="5" y="12" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1.5"/><ellipse cx="32" cy="48" rx="7" ry="7" fill="#2E2E2E"/><ellipse cx="58" cy="48" rx="7" ry="7" fill="#2E2E2E"/><ellipse cx="32" cy="46" rx="2.5" ry="2.5" fill="white" opacity=".6"/><ellipse cx="58" cy="46" rx="2.5" ry="2.5" fill="white" opacity=".6"/></svg>
 </button>
 
 <!-- MOKU CHAT PANEL -->
 <div id="mk-panel" role="dialog" aria-label="Chat com o Moku">
   <div class="mk-hdr">
-    <svg width="28" height="32" viewBox="0 0 90 100" fill="none" style="flex-shrink:0">
-      <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-      <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
-      <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
-      <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-      <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-    </svg>
+    <span class="moku-slot" data-size="28" data-expr="ouvindo" data-still="1" style="flex-shrink:0"></span>
     <div class="mk-hdr-info">
       <h3>Moku</h3>
       <p>Consultor Kanso</p>
@@ -273,16 +261,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
         <div style="position:relative;z-index:2">
           <div class="spb">Vamos estruturar seu RH juntos?</div>
           <div style="display:flex;flex-direction:column;align-items:center">
-            <svg class="mk-svg" width="90" height="100" viewBox="0 0 90 100" fill="none">
-              <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-              <rect x="5" y="8" width="80" height="38" rx="24" fill="#EDEBE5" opacity=".4"/>
-              <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-              <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-              <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-              <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-              <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-              <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-            </svg>
+            <span class="moku-slot" data-size="90" data-expr="neutro"></span>
             <div class="mk-sh" style="width:36px;height:5px;margin-top:3px"></div>
           </div>
         </div>
@@ -323,15 +302,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
   <section class="final-sec">
     <div style="display:flex;flex-direction:column;align-items:center">
       <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px">
-        <svg class="mk-svg" width="60" height="67" viewBox="0 0 90 100" fill="none">
-          <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-          <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-          <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-          <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-          <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-          <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-          <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-        </svg>
+        <span class="moku-slot" data-size="60" data-expr="neutro"></span>
         <div class="mk-sh" style="width:30px;height:4px;margin-top:2px"></div>
       </div>
       <h2 style="margin-bottom:10px">Menos ruído.<br>Mais clareza estratégica.</h2>
@@ -355,7 +326,10 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
     <p id="sp" style="margin-bottom:22px">Essas informações personalizam cada diagnóstico gerado pelo Moku.</p>
     <div class="card fa">
       <div id="ss1">
-        <div class="fld"><label>Nome da empresa</label><input id="cx-name" placeholder="Ex: Acme Tecnologia" autocomplete="organization"/></div>
+        <div class="g2">
+          <div class="fld"><label>Seu nome</label><input id="cx-pessoa" placeholder="Ex: Fabi" autocomplete="given-name"/></div>
+          <div class="fld"><label>Nome da empresa</label><input id="cx-name" placeholder="Ex: Acme Tecnologia" autocomplete="organization"/></div>
+        </div>
         <div class="g2">
           <div class="fld"><label>Logo da empresa — opcional</label><input id="cx-logo" type="file" accept="image/png,image/jpeg" style="padding:9px 13px;height:auto;font-size:12px"/></div>
           <div class="fld"><label>Cor principal da marca</label><input id="cx-cor" type="color" value="#1B1B1B" style="padding:4px;height:42px;cursor:pointer"/></div>
@@ -456,15 +430,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
     <div id="hlist"></div>
     <div id="hemp" style="text-align:center;padding:44px;background:var(--off);border:1px dashed var(--bd2);border-radius:var(--rl)">
       <div style="display:flex;flex-direction:column;align-items:center;margin:0 auto 14px;width:fit-content">
-        <svg class="mk-svg" width="44" height="49" viewBox="0 0 90 100" fill="none">
-          <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-          <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-          <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-          <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-          <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-          <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-          <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-        </svg>
+        <span class="moku-slot" data-size="44" data-expr="neutro"></span>
         <div class="mk-sh" style="width:28px;height:4px;margin-top:2px"></div>
       </div>
       <p style="font-size:12px">Nenhum diagnóstico gerado ainda.<br>Selecione um módulo acima para começar.</p>
@@ -492,15 +458,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
 <div id="s-loading" class="screen">
   <div style="max-width:380px;margin:0 auto;padding:90px 20px;text-align:center">
     <div style="display:flex;flex-direction:column;align-items:center;margin:0 auto 28px;width:fit-content">
-      <svg class="mk-svg" width="66" height="73" viewBox="0 0 90 100" fill="none">
-        <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-        <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-        <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/>
-        <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-        <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-        <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-        <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-      </svg>
+      <span class="moku-slot" data-size="66" data-expr="analisando"></span>
       <div class="mk-sh" style="width:32px;height:4px;margin-top:2px"></div>
     </div>
     <h2 style="font-size:20px;margin-bottom:7px">Analisando sua empresa</h2>
@@ -516,15 +474,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
     <button class="btn btn-g" style="padding:0 0 20px;color:var(--st2);margin-left:-4px" onclick="goTo('dashboard')">← Painel</button>
     <div id="ohero" style="margin-bottom:20px" class="fa"></div>
     <div id="mk-cta" style="background:var(--sd);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
-      <svg width="32" height="36" viewBox="0 0 90 100" fill="none" style="flex-shrink:0">
-        <rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>
-        <ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
-        <ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/>
-        <ellipse cx="32" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-        <ellipse cx="58" cy="42" rx="2.5" ry="2.5" fill="white" opacity=".6"/>
-        <rect x="30" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-        <rect x="48" y="84" width="12" height="10" rx="4" fill="#C8C4BC"/>
-      </svg>
+      <span class="moku-slot" data-size="32" data-expr="feliz" data-still="1" style="flex-shrink:0"></span>
       <div style="flex:1">
         <div style="font-size:13px;font-weight:500;margin-bottom:2px">Tem dúvidas sobre este plano?</div>
         <div style="font-size:11px;color:var(--st);font-weight:300">O Moku já conhece o contexto da sua empresa e pode aprofundar qualquer ponto.</div>
@@ -728,9 +678,9 @@ function rDots(step){
 rDots(1);
 
 function sNext(s){
-  const f={1:['cx-name','cx-setor','cx-size'],2:['cx-modelo','cx-estagio','cx-fin'],3:['cx-matur','cx-rhsize','cx-cargo']};
+  const f={1:['cx-pessoa','cx-name','cx-setor','cx-size'],2:['cx-modelo','cx-estagio','cx-fin'],3:['cx-matur','cx-rhsize','cx-cargo']};
   if(f[s]){for(const id of f[s]){if(!document.getElementById(id).value){alert('Preencha todos os campos.');return;}}}
-  if(s===1){ctx.name=document.getElementById('cx-name').value.trim();ctx.setor=document.getElementById('cx-setor').value;ctx.size=document.getElementById('cx-size').value;ctx.cor=document.getElementById('cx-cor').value;}
+  if(s===1){ctx.pessoa=document.getElementById('cx-pessoa').value.trim();ctx.name=document.getElementById('cx-name').value.trim();ctx.setor=document.getElementById('cx-setor').value;ctx.size=document.getElementById('cx-size').value;ctx.cor=document.getElementById('cx-cor').value;}
   else if(s===2){ctx.modelo=document.getElementById('cx-modelo').value;ctx.estagio=document.getElementById('cx-estagio').value;ctx.financeiro=document.getElementById('cx-fin').value;}
   else if(s===3){ctx.maturidade=document.getElementById('cx-matur').value;ctx.rhsize=document.getElementById('cx-rhsize').value;ctx.cargo=document.getElementById('cx-cargo').value;}
   document.getElementById('ss'+s).style.display='none';
@@ -750,7 +700,7 @@ function finishSetup(){
 // DASHBOARD
 function renderDash(){
   const h=new Date().getHours();
-  document.getElementById('dgreet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+(ctx.cargo||'').split('/')[0].trim();
+  document.getElementById('dgreet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+(ctx.pessoa||(ctx.cargo||'').split('/')[0].trim());
   document.getElementById('dco').innerHTML=`
     <div>
       <div style="font-size:14px;font-weight:400;color:rgba(247,244,238,0.95);margin-bottom:3px">${ctx.name}</div>
@@ -859,7 +809,7 @@ Responda APENAS com JSON válido sem markdown:
   }catch(e){
     clearInterval(anim);
     console.error(e);
-    alert('Erro ao gerar o diagnóstico. Verifique a conexão e tente novamente.');
+    alert('Erro ao gerar o diagnóstico: '+((e&&e.message)?e.message:'falha de conexão'));
     goTo('diag');
   }
 }
@@ -929,7 +879,7 @@ function initMoku(){
 
 Tom: preciso, calmo, consultivo. Respostas curtas — máximo 4 linhas. Sem entusiasmo excessivo.`;
   mkHist=[];
-  addMkMsg(`Olá. Estou a par do contexto da ${ctx.name}. O que você precisa?`);
+  addMkMsg('Olá'+(ctx.pessoa?', '+ctx.pessoa:'')+'. Estou a par do contexto da '+ctx.name+'. O que você precisa?');
   rSugs(['O que priorizar primeiro?','Como engajar a liderança?','Qual o maior risco?']);
 }
 
@@ -955,9 +905,7 @@ function openChat(){
   setTimeout(()=>document.getElementById('mk-inp').focus(),100);
 }
 
-function mkAvatar(){
-  return `<div class="msg-av"><svg width="16" height="18" viewBox="0 0 90 100" fill="none"><rect x="5" y="8" width="80" height="76" rx="24" fill="#E8E4DC"/><ellipse cx="32" cy="44" rx="7" ry="7" fill="#2E2E2E"/><ellipse cx="58" cy="44" rx="7" ry="7" fill="#2E2E2E"/></svg></div>`;
-}
+function mkAvatar(){return '<div class="msg-av">'+mokuSVG('neutro',15,true)+'</div>';}
 
 function addMkMsg(text){
   mkHist.push({role:'assistant',content:text});
@@ -1170,6 +1118,34 @@ function genDOC(){
   a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
 }
+
+// ── MOKU 2.0 — broto, bochechas e expressões ─────────────────────────────────
+function mokuSVG(expr,w,still){
+  const h=Math.round(w*104/90);
+  let eyes='';
+  if(expr==='analisando'){
+    eyes='<rect x="25" y="46" width="14" height="4" rx="2" fill="#2E2E2E"/><rect x="51" y="46" width="14" height="4" rx="2" fill="#2E2E2E"/>';
+  }else if(expr==='feliz'){
+    eyes='<path d="M25 50 Q32 42 39 50" stroke="#2E2E2E" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M51 50 Q58 42 65 50" stroke="#2E2E2E" stroke-width="4" stroke-linecap="round" fill="none"/>';
+  }else if(expr==='ouvindo'){
+    eyes='<ellipse cx="32" cy="48" rx="6.5" ry="7" fill="#2E2E2E"/><ellipse cx="58" cy="48" rx="6.5" ry="7" fill="#2E2E2E"/><ellipse cx="33.5" cy="45.5" rx="2.5" ry="2.5" fill="white" opacity=".7"/><ellipse cx="59.5" cy="45.5" rx="2.5" ry="2.5" fill="white" opacity=".7"/><path d="M52 36 Q58 33 64 35" stroke="#C8C4BC" stroke-width="2.5" stroke-linecap="round" fill="none"/>';
+  }else{
+    eyes='<ellipse cx="32" cy="48" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/><ellipse cx="58" cy="48" rx="7" ry="7" fill="#2E2E2E" class="mk-bl"/><ellipse cx="32" cy="46" rx="2.5" ry="2.5" fill="white" opacity=".6"/><ellipse cx="58" cy="46" rx="2.5" ry="2.5" fill="white" opacity=".6"/>';
+  }
+  return '<svg'+(still?'':' class="mk-svg"')+' width="'+w+'" height="'+h+'" viewBox="0 0 90 104" fill="none">'
+    +'<path d="M45 12 Q45 4 45 2" stroke="#4A5E45" stroke-width="2.5" stroke-linecap="round" fill="none"/>'
+    +'<path d="M45 4 Q38 -2 33 3 Q37 9 45 5 Z" fill="#6B7F65"/>'
+    +'<path d="M45 4 Q52 -2 57 3 Q53 9 45 5 Z" fill="#4A5E45"/>'
+    +'<rect x="5" y="12" width="80" height="76" rx="24" fill="#E8E4DC" stroke="#C8C4BC" stroke-width="1"/>'
+    +eyes
+    +'<ellipse cx="22" cy="58" rx="4.5" ry="3" fill="#D9A78F" opacity=".45"/>'
+    +'<ellipse cx="68" cy="58" rx="4.5" ry="3" fill="#D9A78F" opacity=".45"/>'
+    +'<rect x="30" y="88" width="12" height="10" rx="4" fill="#C8C4BC"/>'
+    +'<rect x="48" y="88" width="12" height="10" rx="4" fill="#C8C4BC"/></svg>';
+}
+document.querySelectorAll('.moku-slot').forEach(function(el){
+  el.innerHTML=mokuSVG(el.dataset.expr||'neutro',parseInt(el.dataset.size||'90',10),el.dataset.still==='1');
+});
 </script>
 </body>
 </html>
