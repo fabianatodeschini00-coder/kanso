@@ -421,7 +421,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
   <div class="wrap-w" style="padding-top:88px">
     <div style="margin-bottom:26px" class="fa">
       <h2 id="dgreet" style="margin-bottom:4px"></h2>
-      <p>Selecione uma área para iniciar o diagnóstico.</p>
+      <p>Selecione uma área para iniciar o diagnóstico. <button class="btn btn-g" style="font-size:11px;padding:2px 6px;color:var(--st2);text-decoration:underline" onclick="resetKanso()">Recomeçar do zero</button></p>
     </div>
     <div id="dco" style="background:var(--ch);border-radius:var(--rl);padding:18px 22px;margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px"></div>
     <div class="lbl" style="margin-bottom:12px">Módulos disponíveis</div>
@@ -694,6 +694,7 @@ function finishSetup(){
   ctx.orcamento=document.getElementById('cx-orc').value;
   ctx.historico=document.getElementById('cx-hist').value;
   initMoku();
+  saveState();
   goTo('dashboard');
 }
 
@@ -805,6 +806,7 @@ Responda APENAS com JSON válido sem markdown:
     const now=new Date();
     hist.push({moduleId:curMod,title:mod.title,icon:mod.icon,date:now.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),output:parsed});
     updMokuCtx(mod.title,parsed);
+    saveState();
     setTimeout(()=>{renderOut();goTo('output');},700);
   }catch(e){
     clearInterval(anim);
@@ -961,7 +963,7 @@ async function sendChat(){
     const data=await res.json();
     hideTyping();
     if(data.error){addMkMsg('Erro na conexão. Tente novamente.');}
-    else{const reply=data.content?.[0]?.text||'Não consegui processar.';addMkMsg(reply);}
+    else{const reply=data.content?.[0]?.text||'Não consegui processar.';addMkMsg(reply);saveState();}
     mkTyping=false;
     rSugs(['Detalhar mais','Como implementar?','Quais os riscos?','Próximo passo imediato']);
   }catch(e){
@@ -1163,6 +1165,41 @@ function mokuSVG(expr,w,still){
 document.querySelectorAll('.moku-slot').forEach(function(el){
   el.innerHTML=mokuSVG(el.dataset.expr||'neutro',parseInt(el.dataset.size||'90',10),el.dataset.still==='1');
 });
+
+// ── PERSISTÊNCIA LOCAL — o Kanso lembra de quem volta ────────────────────────
+function saveState(){
+  try{
+    localStorage.setItem('kanso_v1',JSON.stringify({ctx:ctx,hist:hist,mkCtx:mkCtx,mkHist:mkHist}));
+  }catch(e){console.warn('Não foi possível salvar localmente:',e);}
+}
+function resetKanso(){
+  if(!confirm('Isso apaga a empresa configurada e todos os diagnósticos salvos neste navegador. Continuar?'))return;
+  try{localStorage.removeItem('kanso_v1');}catch(e){}
+  location.reload();
+}
+(function restoreState(){
+  let saved=null;
+  try{saved=JSON.parse(localStorage.getItem('kanso_v1')||'null');}catch(e){}
+  if(!saved||!saved.ctx||!saved.ctx.name)return;
+  ctx=saved.ctx||{};
+  hist=saved.hist||[];
+  mkCtx=saved.mkCtx||'';
+  mkHist=saved.mkHist||[];
+  const box=document.getElementById('mk-msgs');
+  box.innerHTML='';
+  if(mkHist.length){
+    mkHist.forEach(function(m){
+      const el=document.createElement('div');
+      if(m.role==='user'){el.className='msg usr';el.innerHTML='<div class="mb">'+fmtMk(m.content)+'</div>';}
+      else{el.className='msg mk';el.innerHTML=mkAvatar()+'<div class="mb">'+fmtMk(m.content)+'</div>';}
+      box.appendChild(el);
+    });
+    rSugs(['Continuar de onde paramos','O que priorizar agora?','Resumir o último plano']);
+  }else{
+    initMoku();
+  }
+  goTo('dashboard');
+})();
 </script>
 </body>
 </html>
