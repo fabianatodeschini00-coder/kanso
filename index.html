@@ -500,7 +500,7 @@ p{font-size:14px;color:var(--st);line-height:1.75;font-weight:300}
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script>
 const API='/api/chat';
 
@@ -984,9 +984,20 @@ function pSlideBase(p){
   return s;
 }
 
+function loadPptxLib(){
+  return new Promise(function(resolve,reject){
+    if(typeof PptxGenJS!=='undefined'){resolve();return;}
+    var sc=document.createElement('script');
+    sc.src='https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+    sc.onload=function(){resolve();};
+    sc.onerror=function(){reject(new Error('Não foi possível carregar a biblioteca de apresentação. Verifique sua conexão e tente de novo.'));};
+    document.head.appendChild(sc);
+  });
+}
+
 async function genPPTX(){
   if(!outData){alert('Gere um diagnóstico primeiro.');return;}
-  if(typeof PptxGenJS==='undefined'){alert('Biblioteca carregando — tente novamente em alguns segundos.');return;}
+  try{await loadPptxLib();}catch(err){alert(err.message);return;}
   const d=outData,mod=MODS.find(m=>m.id===curMod),cor=brandCor();
   const hoje=new Date().toLocaleDateString('pt-BR');
   const p=new PptxGenJS();
