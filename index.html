@@ -877,7 +877,7 @@ function initMoku(){
 - Maturidade RH: ${ctx.maturidade||'não informado'}
 - Urgência: ${ctx.urgencia||'não informado'} | Orçamento: ${ctx.orcamento||'não informado'}
 
-Tom: preciso, calmo, consultivo. Respostas curtas — máximo 4 linhas. Sem entusiasmo excessivo.`;
+Tom: preciso, calmo, consultivo. Respostas curtas — máximo 4 linhas. Sem entusiasmo excessivo. Responda sempre em texto puro, sem nenhuma formatação markdown: sem asteriscos, sem hashtags, sem listas com hífen.`;
   mkHist=[];
   addMkMsg('Olá'+(ctx.pessoa?', '+ctx.pessoa:'')+'. Estou a par do contexto da '+ctx.name+'. O que você precisa?');
   rSugs(['O que priorizar primeiro?','Como engajar a liderança?','Qual o maior risco?']);
@@ -907,11 +907,17 @@ function openChat(){
 
 function mkAvatar(){return '<div class="msg-av">'+mokuSVG('neutro',15,true)+'</div>';}
 
+function fmtMk(t){
+  t=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  t=t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>');
+  t=t.replace(/^#+\s*/gm,'').replace(/\n/g,'<br>');
+  return t;
+}
 function addMkMsg(text){
   mkHist.push({role:'assistant',content:text});
   const el=document.createElement('div');
   el.className='msg mk';
-  el.innerHTML=`${mkAvatar()}<div class="mb">${text}</div>`;
+  el.innerHTML=`${mkAvatar()}<div class="mb">${fmtMk(text)}</div>`;
   document.getElementById('mk-msgs').appendChild(el);
   document.getElementById('mk-msgs').scrollTop=9999;
 }
